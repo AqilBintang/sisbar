@@ -22,7 +22,18 @@ class PaymentController extends Controller
     public function createPayment(Request $request, $bookingId)
     {
         try {
+            Log::info('Creating payment for booking ID: ' . $bookingId);
+            
             $booking = Booking::with(['barber', 'service'])->findOrFail($bookingId);
+
+            // Validate Midtrans configuration
+            if (empty(config('midtrans.server_key')) || empty(config('midtrans.client_key'))) {
+                Log::error('Midtrans configuration is incomplete');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Konfigurasi pembayaran tidak lengkap. Silakan hubungi administrator.'
+                ], 500);
+            }
 
             // Check if booking is eligible for payment
             if ($booking->payment_method !== 'online') {
@@ -39,18 +50,17 @@ class PaymentController extends Controller
                 ], 400);
             }
 
-            // Create or get existing snap token
-            if (!$booking->snap_token) {
-                $snapToken = $this->midtransService->createSnapToken($booking);
-                $booking->update(['snap_token' => $snapToken]);
-            } else {
-                $snapToken = $booking->snap_token;
-            }
+            // Always create new snap token for better reliability
+            $snapToken = $this->midtransService->createSnapToken($booking);
+            $booking->update(['snap_token' => $snapToken]);
+
+            Log::info('Payment token created successfully for booking ID: ' . $bookingId);
 
             return response()->json([
                 'success' => true,
                 'snap_token' => $snapToken,
                 'client_key' => config('midtrans.client_key'),
+                'is_production' => config('midtrans.is_production', false),
                 'booking' => [
                     'id' => $booking->id,
                     'customer_name' => $booking->customer_name,
@@ -62,11 +72,13 @@ class PaymentController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Payment Creation Error: ' . $e->getMessage());
+            Log::error('Payment Creation Error for booking ID ' . $bookingId . ': ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
             
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal membuat pembayaran. Silakan coba lagi.'
+                'message' => 'Gagal membuat pembayaran: ' . $e->getMessage()
             ], 500);
         }
     }

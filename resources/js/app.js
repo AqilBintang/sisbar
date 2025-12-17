@@ -78,7 +78,7 @@ class BarbershopApp {
         
         // Check if we're on a non-SPA page (like login, admin, etc.)
         const currentPath = window.location.pathname;
-        const nonSpaPages = ['/login', '/admin', '/barber'];
+        const nonSpaPages = ['/login', '/admin', '/barber', '/test-bookings'];
         const isOnNonSpaPage = nonSpaPages.some(path => currentPath.startsWith(path));
         
         if (isOnNonSpaPage) {

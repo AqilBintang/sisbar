@@ -188,30 +188,73 @@
                                 Silakan lakukan pembayaran untuk mengkonfirmasi booking Anda
                             </p>
                         </div>
-                        <div class="flex justify-center">
+                        
+                        <!-- Payment Timer -->
+                        <div id="payment-timer" class="mb-4 p-3 bg-orange-100 border border-orange-400 text-orange-700 rounded-lg text-center">
+                            <div class="font-bold">⏰ Waktu Pembayaran Tersisa</div>
+                            <div id="countdown" class="text-2xl font-mono">05:00</div>
+                            <div class="text-sm">Booking akan otomatis dibatalkan jika tidak dibayar</div>
+                        </div>
+                        
+                        <!-- Payment Buttons -->
+                        <div class="space-y-3">
                             <button onclick="processOnlinePayment()" 
                                     id="pay-now-btn"
-                                    class="px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                                    class="w-full px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
                                 <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                 </svg>
-                                Bayar Sekarang
+                                💳 Bayar Sekarang
                             </button>
+                            
+                            <!-- Test Payment Buttons -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="simulatePaymentSuccess()" 
+                                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                                    ✅ Test: Sudah Bayar
+                                </button>
+                                <button onclick="simulatePaymentCancel()" 
+                                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                                    ❌ Test: Tidak Bayar
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Main Action Buttons -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- PDF Download -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <!-- Download PDF -->
                     <button onclick="downloadReceiptPDF()" 
-                            class="group px-6 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                            class="group px-4 py-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
                         <div class="flex flex-col items-center">
-                            <svg class="w-8 h-8 mb-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 mb-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
-                            <span class="text-sm">Cetak PDF</span>
-                            <span class="text-xs opacity-75">Struk</span>
+                            <span class="text-xs">Download PDF</span>
+                        </div>
+                    </button>
+                    
+                    <!-- View PDF -->
+                    <button onclick="viewReceiptPDF()" 
+                            class="group px-4 py-4 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                        <div class="flex flex-col items-center">
+                            <svg class="w-6 h-6 mb-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            <span class="text-xs">View PDF</span>
+                        </div>
+                    </button>
+                    
+                    <!-- Print Receipt -->
+                    <button onclick="window.print()" 
+                            class="group px-4 py-4 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                        <div class="flex flex-col items-center">
+                            <svg class="w-6 h-6 mb-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                            </svg>
+                            <span class="text-xs">Print</span>
                         </div>
                     </button>
                     
@@ -574,6 +617,14 @@ function displayBookingData(booking) {
             }
         }
         
+        // Store current booking data globally
+        currentBookingData = booking;
+        
+        // Start payment timer if online payment and has expires_at
+        if (isOnlinePayment && isPending && booking.payment_expires_at) {
+            startPaymentTimer(booking.payment_expires_at);
+        }
+        
         window.bookingDebug.addLog('Data populated successfully');
         
     } catch (error) {
@@ -723,42 +774,62 @@ async function processOnlinePayment() {
             }
         });
 
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const result = await response.json();
         
         if (result.success) {
             window.bookingDebug.addLog('Payment token received, opening Midtrans');
+            window.bookingDebug.addLog('Environment: ' + (result.is_production ? 'Production' : 'Sandbox'));
             
-            // Initialize Midtrans Snap with default options
+            // Validate snap token
+            if (!result.snap_token) {
+                throw new Error('Snap token tidak diterima dari server');
+            }
+
+            // Check if snap is available
+            if (typeof snap === 'undefined') {
+                throw new Error('Midtrans Snap tidak tersedia. Silakan refresh halaman.');
+            }
+            
+            // Initialize Midtrans Snap with enhanced options
             snap.pay(result.snap_token, {
-                
                 // Callbacks
                 onSuccess: function(result) {
                     window.bookingDebug.addLog('Payment success: ' + JSON.stringify(result));
-                    alert('Pembayaran berhasil! Status booking telah diperbarui.');
+                    alert('🎉 Pembayaran berhasil! Status booking telah diperbarui.');
                     // Refresh booking data instead of full page reload
-                    loadBookingData();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 },
                 onPending: function(result) {
                     window.bookingDebug.addLog('Payment pending: ' + JSON.stringify(result));
-                    alert('Pembayaran sedang diproses. Status akan diperbarui otomatis.');
+                    alert('⏳ Pembayaran sedang diproses. Status akan diperbarui otomatis.');
                     // Refresh booking data instead of full page reload
-                    loadBookingData();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 },
                 onError: function(result) {
                     window.bookingDebug.addLog('Payment error: ' + JSON.stringify(result));
-                    alert('Pembayaran gagal: ' + (result.status_message || 'Silakan coba lagi.'));
+                    const errorMsg = result.status_message || result.message || 'Terjadi kesalahan dalam pembayaran';
+                    alert('❌ Pembayaran gagal: ' + errorMsg);
                     payButton.innerHTML = originalText;
                     payButton.disabled = false;
                 },
                 onClose: function() {
                     window.bookingDebug.addLog('Payment popup closed by user');
+                    alert('💡 Pembayaran dibatalkan. Anda dapat melanjutkan pembayaran kapan saja.');
                     payButton.innerHTML = originalText;
                     payButton.disabled = false;
                 }
             });
         } else {
             window.bookingDebug.addLog('Payment creation failed: ' + result.message);
-            alert(result.message || 'Gagal membuat pembayaran.');
+            alert('❌ ' + (result.message || 'Gagal membuat pembayaran.'));
             payButton.innerHTML = originalText;
             payButton.disabled = false;
         }
@@ -768,6 +839,159 @@ async function processOnlinePayment() {
         payButton.innerHTML = originalText;
         payButton.disabled = false;
     }
+}
+
+// Payment timer variables
+let paymentTimer;
+let currentBookingData = null;
+
+// Start countdown timer
+function startPaymentTimer(expiresAt) {
+    if (!expiresAt) return;
+    
+    const countdownElement = document.getElementById('countdown');
+    if (!countdownElement) return;
+    
+    const expiryDate = new Date(expiresAt);
+    
+    paymentTimer = setInterval(function() {
+        const now = new Date();
+        const timeLeft = Math.max(0, Math.floor((expiryDate - now) / 1000));
+        
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        countdownElement.textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(paymentTimer);
+            expireBooking();
+            return;
+        }
+        
+        // Change color when time is running out
+        const timerElement = countdownElement.parentElement;
+        if (timeLeft <= 60) {
+            timerElement.className = 'mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center';
+        } else if (timeLeft <= 120) {
+            timerElement.className = 'mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg text-center';
+        }
+    }, 1000);
+}
+
+// Expire booking
+async function expireBooking() {
+    if (!currentBookingData) return;
+    
+    try {
+        const response = await fetch(`/api/expire-booking/${currentBookingData.id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('⏰ Waktu pembayaran habis! Booking telah dibatalkan otomatis.');
+            window.location.href = '/';
+        }
+    } catch (error) {
+        console.error('Error expiring booking:', error);
+    }
+}
+
+// Simulate payment success
+async function simulatePaymentSuccess() {
+    if (!currentBookingData) {
+        alert('Data booking belum dimuat');
+        return;
+    }
+    
+    if (!confirm('Simulasi pembayaran berhasil?\n\nIni akan mengubah status booking menjadi "Paid".')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/simulate-payment/${currentBookingData.id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            },
+            body: JSON.stringify({ status: 'success' })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            clearInterval(paymentTimer);
+            alert('🎉 Simulasi pembayaran berhasil!\n\nStatus booking telah diubah menjadi "Paid".');
+            loadBookingData(); // Reload data
+        } else {
+            alert('❌ Error: ' + result.message);
+        }
+    } catch (error) {
+        alert('❌ Error: ' + error.message);
+    }
+}
+
+// Simulate payment cancel
+async function simulatePaymentCancel() {
+    if (!currentBookingData) {
+        alert('Data booking belum dimuat');
+        return;
+    }
+    
+    if (!confirm('Simulasi pembayaran dibatalkan?\n\nIni akan menghapus booking dari database.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/simulate-payment/${currentBookingData.id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            },
+            body: JSON.stringify({ status: 'cancel' })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            clearInterval(paymentTimer);
+            alert('❌ Simulasi pembayaran dibatalkan!\n\nBooking telah dihapus dari database.');
+            window.location.href = '/';
+        } else {
+            alert('❌ Error: ' + result.message);
+        }
+    } catch (error) {
+        alert('❌ Error: ' + error.message);
+    }
+}
+
+// Download PDF
+function downloadReceiptPDF() {
+    if (!currentBookingData) {
+        alert('Data booking belum dimuat');
+        return;
+    }
+    
+    window.location.href = `/pdf/receipt/${currentBookingData.id}/download`;
+}
+
+// View PDF
+function viewReceiptPDF() {
+    if (!currentBookingData) {
+        alert('Data booking belum dimuat');
+        return;
+    }
+    
+    window.open(`/pdf/receipt/${currentBookingData.id}/view`, '_blank');
 }
 
 

@@ -3041,9 +3041,8 @@ Enhanced Barber Card Design - Sesuai Gambar Referensi */
   .barber-grid-modern {
     gap: 1rem;
   }
-}/
-* BARBER CARD UNIFORM DESIGN - Ukuran Seragam & Konsisten */
-
+}
+/* BARBER CARD UNIFORM DESIGN - Ukuran Seragam & Konsisten */
 /* Container utama untuk memastikan ukuran seragam */
 .barber-card-uniform {
   min-height: 480px;

@@ -601,8 +601,6 @@ document.getElementById('booking-form').addEventListener('submit', async functio
     e.preventDefault();
     
     console.log('🚀 Form submitted!');
-    console.log('📊 Selected payment method:', selectedPaymentMethod);
-    console.log('📊 Booking data:', bookingData);
     
     // Show loading state
     const submitButton = document.querySelector('button[type="submit"]');
@@ -616,10 +614,15 @@ document.getElementById('booking-form').addEventListener('submit', async functio
     // Add selected data
     Object.assign(data, bookingData);
     
+    // Ensure payment method is set correctly
+    if (selectedPaymentMethod) {
+        data.payment_method = selectedPaymentMethod;
+    }
+    
     console.log('📤 Final data to send:', data);
     
     try {
-        console.log('🌐 Sending request to:', '{{ route("booking.store") }}');
+
         
         const response = await fetch('{{ route("booking.store") }}', {
             method: 'POST',
@@ -631,24 +634,15 @@ document.getElementById('booking-form').addEventListener('submit', async functio
             body: JSON.stringify(data)
         });
 
-        console.log('📡 Response status:', response.status);
-        
-        // Get response text first to see what we're getting
         const responseText = await response.text();
-        console.log('📄 Raw response:', responseText);
         
         // Try to parse as JSON
         let result;
         try {
             result = JSON.parse(responseText);
-            console.log('✅ Parsed JSON response:', result);
         } catch (parseError) {
-            console.error('❌ Failed to parse JSON:', parseError);
-            console.log('📄 Response was:', responseText);
             
-            // Check if it's an HTML response (redirect)
             if (responseText.includes('<html') || responseText.includes('<!DOCTYPE')) {
-                console.log('🔄 Received HTML response - likely a redirect');
                 alert('Terjadi redirect. Silakan coba lagi.');
                 submitButton.innerHTML = originalText;
                 submitButton.disabled = false;
@@ -659,8 +653,6 @@ document.getElementById('booking-form').addEventListener('submit', async functio
         }
         
         if (result.success) {
-            console.log('✅ Booking successful!');
-            
             // Store booking data in localStorage for receipt page
             localStorage.setItem('lastBooking', JSON.stringify(result.booking));
             
@@ -670,13 +662,11 @@ document.getElementById('booking-form').addEventListener('submit', async functio
             // Instead of redirect, show receipt inline
             showBookingReceipt(result.booking, result.booking_id);
         } else {
-            console.error('❌ Booking failed:', result.message);
             alert(result.message || 'Terjadi kesalahan saat membuat booking.');
             submitButton.innerHTML = originalText;
             submitButton.disabled = false;
         }
     } catch (error) {
-        console.error('💥 Error:', error);
         alert('Terjadi kesalahan saat membuat booking. Silakan coba lagi.');
         submitButton.innerHTML = originalText;
         submitButton.disabled = false;
@@ -794,7 +784,7 @@ function showBookingReceipt(booking, bookingId) {
                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div class="flex justify-between items-center">
                         <div>
-                            <p class="font-semibold text-blue-800">${booking.payment_method === 'online' ? 'Bayar Online' : 'Bayar Tunai'}</p>
+                            <p class="font-semibold text-blue-800">${booking.payment_method_display || ((booking.payment_method === 'online' || selectedPaymentMethod === 'online') ? 'Bayar Online' : 'Bayar Tunai')}</p>
                             <p class="text-sm text-blue-600">${booking.payment_status || 'Menunggu Pembayaran'}</p>
                         </div>
                     </div>
@@ -829,25 +819,119 @@ function showBookingReceipt(booking, bookingId) {
             </div>
         </div>
 
+        <!-- Payment Section (for online payment) -->
+        <div id="inline-payment-section" class="mb-8" style="display: ${(booking.payment_method === 'online' || selectedPaymentMethod === 'online') && booking.payment_status !== 'Sudah Dibayar' && booking.payment_status !== 'paid' ? 'block' : 'none'};">
+            <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6">
+                <div class="text-center mb-4">
+                    <h3 class="text-blue-400 font-bold text-lg mb-2">💳 Pembayaran Online</h3>
+                    <p class="text-gray-300 text-sm">
+                        Silakan lakukan pembayaran untuk mengkonfirmasi booking Anda
+                    </p>
+                </div>
+                
+                <!-- Payment Timer -->
+                <div id="inline-payment-timer" class="mb-4 p-3 bg-orange-100 border border-orange-400 text-orange-700 rounded-lg text-center">
+                    <div class="font-bold">⏰ Waktu Pembayaran Tersisa</div>
+                    <div id="inline-countdown" class="text-2xl font-mono">05:00</div>
+                    <div class="text-sm">Booking akan otomatis dibatalkan jika tidak dibayar</div>
+                </div>
+                
+                <!-- Payment Buttons -->
+                <div class="space-y-3">
+                    <button onclick="processInlineOnlinePayment(${bookingId})" 
+                            id="inline-pay-now-btn"
+                            class="w-full px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                        </svg>
+                        💳 Bayar Sekarang
+                    </button>
+                    
+                    <!-- Test Payment Buttons -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="simulateInlinePaymentSuccess(${bookingId})" 
+                                class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                            ✅ Test: Sudah Bayar
+                        </button>
+                        <button onclick="simulateInlinePaymentCancel(${bookingId})" 
+                                class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                            ❌ Test: Tidak Bayar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <!-- Action Buttons -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8">
+            <!-- Download PDF -->
+            <button onclick="downloadInlineReceiptPDF(${bookingId})" 
+                    class="group px-4 py-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <div class="flex flex-col items-center">
+                    <svg class="w-6 h-6 mb-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <span class="text-xs">Download PDF</span>
+                </div>
+            </button>
+            
+            <!-- View PDF -->
+            <button onclick="viewInlineReceiptPDF(${bookingId})" 
+                    class="group px-4 py-4 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <div class="flex flex-col items-center">
+                    <svg class="w-6 h-6 mb-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    <span class="text-xs">View PDF</span>
+                </div>
+            </button>
+            
+            <!-- Full Receipt -->
             <a href="/booking-receipt?booking_id=${bookingId}" target="_blank"
-               class="px-6 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition-all text-center">
-                📄 Buka Struk Lengkap
+               class="group px-4 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg text-center">
+                <div class="flex flex-col items-center">
+                    <svg class="w-6 h-6 mb-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <span class="text-xs">Struk Lengkap</span>
+                </div>
             </a>
+            
+            <!-- Booking Lagi -->
             <a href="/booking" 
-               class="px-6 py-4 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-xl transition-all text-center">
-                🔄 Booking Lagi
+               class="group px-4 py-4 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg text-center">
+                <div class="flex flex-col items-center">
+                    <svg class="w-6 h-6 mb-2 group-hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <span class="text-xs">Booking Lagi</span>
+                </div>
             </a>
+            
+            <!-- Kembali ke Beranda -->
             <a href="/" 
-               class="px-6 py-4 bg-slate-600 hover:bg-slate-500 text-white font-bold rounded-xl transition-all text-center">
-                🏠 Kembali ke Beranda
+               class="group px-4 py-4 bg-slate-600 hover:bg-slate-500 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg text-center">
+                <div class="flex flex-col items-center">
+                    <svg class="w-6 h-6 mb-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    <span class="text-xs">Beranda</span>
+                </div>
             </a>
         </div>
     `;
     
     // Insert receipt after the main container
     document.querySelector('.container.mx-auto').appendChild(receiptContainer);
+    
+    // Start payment timer if online payment and has expires_at
+    const isOnlinePayment = booking.payment_method === 'online' || selectedPaymentMethod === 'online';
+    
+    if (isOnlinePayment && booking.payment_expires_at) {
+        startInlinePaymentTimer(booking.payment_expires_at);
+    }
     
     console.log('✅ Receipt displayed successfully');
 }
@@ -885,5 +969,270 @@ function formatTime(timeString) {
         return timeString;
     }
 }
+
+// Payment timer variables for inline receipt
+let inlinePaymentTimer;
+
+// Start countdown timer for inline receipt
+function startInlinePaymentTimer(expiresAt) {
+    if (!expiresAt) return;
+    
+    const countdownElement = document.getElementById('inline-countdown');
+    if (!countdownElement) return;
+    
+    const expiryDate = new Date(expiresAt);
+    
+    inlinePaymentTimer = setInterval(function() {
+        const now = new Date();
+        const timeLeft = Math.max(0, Math.floor((expiryDate - now) / 1000));
+        
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        countdownElement.textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(inlinePaymentTimer);
+            expireInlineBooking();
+            return;
+        }
+        
+        // Change color when time is running out
+        const timerElement = countdownElement.parentElement;
+        if (timeLeft <= 60) {
+            timerElement.className = 'mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center';
+        } else if (timeLeft <= 120) {
+            timerElement.className = 'mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg text-center';
+        }
+    }, 1000);
+}
+
+// Expire booking for inline receipt
+async function expireInlineBooking() {
+    alert('⏰ Waktu pembayaran habis! Booking telah dibatalkan otomatis.');
+    window.location.href = '/';
+}
+
+// Process online payment for inline receipt
+async function processInlineOnlinePayment(bookingId) {
+    
+    // Show loading state
+    const payButton = document.getElementById('inline-pay-now-btn');
+    const originalText = payButton.innerHTML;
+    payButton.innerHTML = '<svg class="w-5 h-5 inline mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Memproses...';
+    payButton.disabled = true;
+    
+    try {
+        const response = await fetch(`/payment/create/${bookingId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        
+        if (result.success) {
+            
+            // Validate snap token
+            if (!result.snap_token) {
+                throw new Error('Snap token tidak diterima dari server');
+            }
+
+            // Check if snap is available
+            if (typeof snap === 'undefined') {
+                throw new Error('Midtrans Snap tidak tersedia. Silakan refresh halaman.');
+            }
+            
+            // Initialize Midtrans Snap
+            snap.pay(result.snap_token, {
+                onSuccess: function(result) {
+                    alert('🎉 Pembayaran berhasil! Status booking telah diperbarui.');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                },
+                onPending: function(result) {
+                    alert('⏳ Pembayaran sedang diproses. Status akan diperbarui otomatis.');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                },
+                onError: function(result) {
+                    const errorMsg = result.status_message || result.message || 'Terjadi kesalahan dalam pembayaran';
+                    alert('❌ Pembayaran gagal: ' + errorMsg);
+                    payButton.innerHTML = originalText;
+                    payButton.disabled = false;
+                },
+                onClose: function() {
+                    alert('💡 Pembayaran dibatalkan. Anda dapat melanjutkan pembayaran kapan saja.');
+                    payButton.innerHTML = originalText;
+                    payButton.disabled = false;
+                }
+            });
+        } else {
+            alert('❌ ' + (result.message || 'Gagal membuat pembayaran.'));
+            payButton.innerHTML = originalText;
+            payButton.disabled = false;
+        }
+    } catch (error) {
+        alert('Terjadi kesalahan saat memproses pembayaran.');
+        payButton.innerHTML = originalText;
+        payButton.disabled = false;
+    }
+}
+
+
+
+// Download PDF for inline receipt
+function downloadInlineReceiptPDF(bookingId) {
+    
+    // Create a temporary link to trigger download
+    const link = document.createElement('a');
+    link.href = '/booking-receipt/pdf/' + bookingId;
+    link.download = 'struk-booking-' + String(bookingId).padStart(4, '0') + '.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// View PDF for inline receipt
+function viewInlineReceiptPDF(bookingId) {
+    window.open(`/pdf/receipt/${bookingId}/view`, '_blank');
+}
+
+// Update payment status in the receipt display
+function updatePaymentStatus(status) {
+    // Update payment method display
+    const paymentMethodElement = document.querySelector('.font-semibold.text-blue-800');
+    if (paymentMethodElement) {
+        paymentMethodElement.textContent = 'Bayar Online';
+    }
+    
+    // Update payment status display
+    const paymentStatusElement = document.querySelector('.text-sm.text-blue-600');
+    if (paymentStatusElement) {
+        paymentStatusElement.textContent = status === 'paid' ? 'Sudah Dibayar' : 'Menunggu Pembayaran';
+    }
+    
+    // Update status badge
+    const statusBadge = document.querySelector('.inline-flex.items-center.px-4.py-2.rounded-full');
+    const statusText = statusBadge?.querySelector('span');
+    const statusDot = statusBadge?.querySelector('.w-3.h-3.rounded-full');
+    
+    if (statusBadge && statusText && statusDot) {
+        if (status === 'paid') {
+            // Change to green for paid status
+            statusBadge.className = 'inline-flex items-center px-4 py-2 bg-green-100 border border-green-300 rounded-full';
+            statusDot.className = 'w-3 h-3 bg-green-500 rounded-full mr-2';
+            statusText.className = 'text-green-800 font-semibold';
+            statusText.textContent = 'Sudah Dibayar';
+        }
+    }
+}
+
+// Show payment success message
+function showPaymentSuccessMessage() {
+    // Create success message element
+    const successMessage = document.createElement('div');
+    successMessage.className = 'mb-6 p-4 bg-green-50 border border-green-200 rounded-lg';
+    successMessage.innerHTML = `
+        <div class="flex items-center">
+            <svg class="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+                <h4 class="font-bold text-green-800">Pembayaran Berhasil!</h4>
+                <p class="text-green-700 text-sm">Booking Anda telah dikonfirmasi dan siap untuk dilayani.</p>
+            </div>
+        </div>
+    `;
+    
+    // Insert after the status section
+    const statusSection = document.querySelector('.text-center.mb-6');
+    if (statusSection) {
+        statusSection.parentNode.insertBefore(successMessage, statusSection.nextSibling);
+    }
+}
+
+// Simulate payment success for inline receipt
+async function simulateInlinePaymentSuccess(bookingId) {
+    if (!confirm('Simulasi pembayaran berhasil?\n\nIni akan mengubah status booking menjadi "Sudah Dibayar".')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/simulate-payment/${bookingId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ status: 'success' })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            clearInterval(inlinePaymentTimer);
+            alert('🎉 Simulasi pembayaran berhasil!\n\nStatus booking telah diubah menjadi "Sudah Dibayar".');
+            
+            // Update payment status in the receipt
+            updatePaymentStatus('paid');
+            
+            // Hide payment section
+            const paymentSection = document.getElementById('inline-payment-section');
+            if (paymentSection) {
+                paymentSection.style.display = 'none';
+            }
+            
+            // Show success message in the receipt
+            showPaymentSuccessMessage();
+        } else {
+            alert('❌ Error: ' + result.message);
+        }
+    } catch (error) {
+        alert('❌ Error: ' + error.message);
+    }
+}
+
+// Simulate payment cancel for inline receipt
+async function simulateInlinePaymentCancel(bookingId) {
+    if (!confirm('Simulasi pembayaran dibatalkan?\n\nIni akan menghapus booking dari database.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/simulate-payment/${bookingId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ status: 'cancel' })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            clearInterval(inlinePaymentTimer);
+            alert('❌ Simulasi pembayaran dibatalkan!\n\nBooking telah dihapus dari database.');
+            window.location.href = '/';
+        } else {
+            alert('❌ Error: ' + result.message);
+        }
+    } catch (error) {
+        alert('❌ Error: ' + error.message);
+    }
+}
 </script>
+
+<!-- Midtrans Snap Script -->
+<script src="{{ config('midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('midtrans.client_key') }}"></script>
 @endsection

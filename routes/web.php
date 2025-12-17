@@ -7,11 +7,6 @@ Route::get('/', function () {
     return view('barbershop.index');
 });
 
-// Ngrok testing route
-Route::get('/ngrok-test', function () {
-    return view('ngrok-test');
-});
-
 // Original routes (backup)
 Route::get('/old-dashboard', function () {
     return view('users.dashboard');
@@ -41,14 +36,6 @@ Route::get('/barbershop', function () {
 Route::get('/services', [App\Http\Controllers\ServiceController::class, 'index'])->name('services');
 Route::get('/api/services', [App\Http\Controllers\ServiceController::class, 'getServices']);
 
-// Test route untuk melihat data services
-Route::get('/test-services', function() {
-    $services = App\Models\Service::all();
-    return response()->json($services);
-});
-
-
-
 Route::get('/barbers', function () {
     $barbers = App\Models\Barber::with('schedules')->active()->orderBy('level', 'desc')->orderBy('rating', 'desc')->get();
     return view('barbershop.barbers', compact('barbers'));
@@ -68,11 +55,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/', [App\Http\Controllers\AdminController::class, 'showLogin'])->name('admin.login');
     Route::post('/login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login.post');
     
-    // Test route (remove in production)
-    Route::get('/test-login', function() {
-        session(['admin_logged_in' => true]);
-        return redirect()->route('admin.dashboard')->with('success', 'Admin test login berhasil!');
-    })->name('admin.test.login');
+
     
     // Protected routes (require admin middleware)
     Route::middleware('admin')->group(function () {
@@ -130,15 +113,7 @@ Route::prefix('barber')->group(function () {
     Route::get('/', [App\Http\Controllers\BarberController::class, 'showLogin'])->name('barber.login');
     Route::post('/', [App\Http\Controllers\BarberController::class, 'login'])->name('barber.login.post');
     
-    // Test route (remove in production)
-    Route::get('/test-login/{username}', function($username) {
-        $barberUser = \App\Models\BarberUser::where('username', $username)->where('is_active', true)->first();
-        if ($barberUser) {
-            \Illuminate\Support\Facades\Auth::guard('barber')->login($barberUser);
-            return redirect()->route('barber.dashboard')->with('success', 'Test login berhasil!');
-        }
-        return redirect()->route('barber.login')->with('error', 'User tidak ditemukan');
-    })->name('barber.test.login');
+
     
     // Protected routes (require barber middleware)
     Route::middleware('auth.barber')->group(function () {
@@ -181,6 +156,11 @@ Route::prefix('payment')->group(function () {
     Route::get('/status/{booking}', [App\Http\Controllers\PaymentController::class, 'checkStatus'])->name('payment.status');
 });
 
+// Webhook notification route (without CSRF protection)
+Route::post('/midtrans/notification', [App\Http\Controllers\PaymentController::class, 'handleNotification'])
+    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])
+    ->name('midtrans.notification');
+
 Route::get('/gallery', function () {
     return view('barbershop.index');
 });
@@ -194,9 +174,7 @@ Route::get('/auth/google', [App\Http\Controllers\AuthController::class, 'redirec
 Route::get('/auth/google/callback', [App\Http\Controllers\AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
-// Test login routes (remove in production)
-Route::get('/test-login', [App\Http\Controllers\AuthController::class, 'showTestLogin'])->name('auth.test-login');
-Route::post('/test-login', [App\Http\Controllers\AuthController::class, 'testLogin'])->name('auth.test-login');
+
 
 // Profile routes (protected by authentication)
 Route::middleware('auth.user')->prefix('profile')->name('profile.')->group(function () {
@@ -230,11 +208,7 @@ Route::middleware('auth.user')->group(function () {
     Route::post('/booking/check-status', [App\Http\Controllers\BookingController::class, 'checkStatus'])->name('booking.check-status');
 });
 
-// Test route for schedule system
-Route::get('/test-schedule', function () {
-    $allBarbers = App\Models\Barber::with('schedules')->get();
-    return view('test-schedule', compact('allBarbers'));
-})->name('test.schedule');
+
 
 
 
@@ -243,6 +217,15 @@ Route::get('/test-schedule', function () {
 Route::get('/booking-receipt', function () {
     return view('booking.receipt');
 })->name('booking.receipt');
+
+// Booking receipt with ID parameter (redirect to receipt with query param)
+Route::get('/booking-receipt/{id}', function ($id) {
+    return redirect()->route('booking.receipt', ['booking_id' => $id]);
+})->name('booking.receipt.id');
+
+
+
+
 
 
 
@@ -262,33 +245,70 @@ Route::prefix('ajax')->name('ajax.')->group(function () {
 // Availability checker API (public access)
 Route::post('/api/check-availability', [App\Http\Controllers\BookingController::class, 'checkDateAvailability'])->name('api.check-availability');
 
-// Test route for availability checker
-Route::get('/availability-test', function () {
-    return view('components.availability-checker');
-})->name('availability.test');
-
-
-
-
-
-// Quick admin login for testing (remove in production)
-Route::get('/admin-login-test', function() {
-    $adminUser = \App\Models\User::where('email', 'admin@sisbar.com')->first();
-    
-    if (!$adminUser) {
-        $adminUser = \App\Models\User::create([
-            'name' => 'Admin Sisbar',
-            'email' => 'admin@sisbar.com',
-            'password' => bcrypt('admin123'),
-            'role' => 'admin',
-            'whatsapp_number' => '+6285729421875',
-            'whatsapp_verified' => true,
-            'allow_broadcast' => false
-        ]);
+// Simulate payment API (for testing)
+Route::post('/api/simulate-payment/{id}', function ($id) {
+    try {
+        $booking = App\Models\Booking::findOrFail($id);
+        $request = request();
+        $status = $request->input('status');
+        
+        if ($status === 'success') {
+            // Simulate successful payment
+            $booking->update([
+                'payment_status' => 'paid',
+                'midtrans_order_id' => 'SIMULATE-' . $booking->id . '-' . time(),
+                'midtrans_transaction_id' => 'TXN-SIMULATE-' . time(),
+                'status' => 'confirmed'
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment simulation successful',
+                'booking_status' => 'paid'
+            ]);
+            
+        } elseif ($status === 'cancel') {
+            // Delete booking (simulate cancel)
+            $booking->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking cancelled and deleted',
+                'booking_status' => 'deleted'
+            ]);
+        }
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid status'
+        ], 400);
+        
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error simulating payment: ' . $e->getMessage()
+        ], 500);
     }
-    
-    auth()->login($adminUser);
-    session(['admin_logged_in' => true]);
-    
-    return redirect('/admin/broadcast/create-simple')->with('success', 'Logged in as admin for testing');
-});
+})->name('api.simulate-payment');
+
+
+
+
+
+
+
+
+
+// PDF Routes
+Route::get('/pdf/receipt/{id}/download', [App\Http\Controllers\PDFController::class, 'downloadReceipt'])->name('pdf.receipt.download');
+Route::get('/pdf/receipt/{id}/view', [App\Http\Controllers\PDFController::class, 'viewReceipt'])->name('pdf.receipt.view');
+
+
+
+
+
+
+
+
+
+
