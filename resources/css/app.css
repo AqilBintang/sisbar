@@ -1,0 +1,4039 @@
+@import 'tailwindcss';
+
+:root {
+  --accent: #FCD34D;
+  --accent-foreground: #000000;
+  --background: #000000;
+  --foreground: #ffffff;
+  --yellow-primary: #FCD34D;
+  --yellow-secondary: #F59E0B;
+  --black-primary: #000000;
+  --black-secondary: #1F2937;
+  --gray-dark: #374151;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+}
+
+/* Custom accent color utilities */
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.text-accent-foreground {
+  color: var(--accent-foreground);
+}
+
+.bg-background {
+  background-color: var(--background);
+}
+
+.text-foreground {
+  color: var(--foreground);
+}
+
+/* Smooth animations */
+* {
+  transition: all 0.3s ease;
+}
+
+/* Profile Dropdown Animations */
+.profile-dropdown {
+  transform: translateY(-10px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.profile-dropdown.show {
+  transform: translateY(0);
+}
+
+/* Profile Avatar Hover Effect */
+.profile-avatar {
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-avatar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.profile-avatar:hover::before {
+  transform: translateX(100%);
+}
+
+/* Navbar Profile Integration */
+.navbar-profile-section {
+  position: relative;
+}
+
+.navbar-profile-section:hover .profile-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Mobile Profile Section */
+.mobile-profile-avatar {
+  background: linear-gradient(135deg, var(--accent), #f59e0b);
+  box-shadow: 0 2px 8px rgba(252, 211, 77, 0.3);
+}
+
+/* Simple Profile Icon Styling */
+.profile-icon {
+  position: relative;
+}
+
+.profile-icon svg {
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.profile-icon:hover svg {
+  transform: scale(1.1);
+  filter: drop-shadow(0 2px 4px rgba(252, 211, 77, 0.3));
+}
+
+/* Logo Styling for Visibility */
+.navbar-logo-container {
+  position: relative;
+}
+
+.navbar-logo-container img {
+  filter: brightness(0) invert(1);
+}
+
+/* Footer Logo Styling */
+.footer-logo {
+  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
+}
+
+/* Admin Logo Styling */
+.admin-logo {
+  filter: brightness(0) invert(1);
+}
+
+/* Barbershop Theme Enhancements */
+@keyframes barberPole {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 20px;
+  }
+}
+
+.barber-pole-effect {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--accent),
+    var(--accent) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  animation: barberPole 1s linear infinite;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Button hover effects */
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* Navigation active state */
+.nav-link.active {
+  color: var(--accent) !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+  }
+}
+
+.pulse-accent {
+  animation: pulse 2s infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* Scroll animations */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease-out;
+}
+
+.scroll-animate.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
+/* Additional animations for enhanced UX */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%) skewY(-0.5deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0) skewY(-0.5deg);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.8s ease-in-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 1.2s ease-in-out;
+}
+
+/* Unrolling Yellow Stripe Animation */
+@keyframes unrollStripe {
+  0% {
+    transform: translateX(-100%) skewY(-0.5deg) scaleX(0);
+    transform-origin: left center;
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.2;
+  }
+  30% {
+    transform: translateX(-70%) skewY(-0.5deg) scaleX(0.3);
+    opacity: 0.5;
+  }
+  60% {
+    transform: translateX(-30%) skewY(-0.5deg) scaleX(0.7);
+    opacity: 0.8;
+  }
+  85% {
+    transform: translateX(-5%) skewY(-0.5deg) scaleX(0.95);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(0) skewY(-0.5deg) scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes stripeGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(252, 211, 77, 0.4),
+      0 0 40px rgba(252, 211, 77, 0.2),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 40px rgba(252, 211, 77, 0.6),
+      0 0 80px rgba(252, 211, 77, 0.3),
+      inset 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes rollEffect {
+  0% {
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(252, 211, 77, 0.8) 50%, 
+      transparent 100%);
+    background-size: 0% 100%;
+  }
+  100% {
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(252, 211, 77, 1) 50%, 
+      transparent 100%);
+    background-size: 100% 100%;
+  }
+}
+
+/* Yellow Stripe for Scroll Animation */
+.yellow-stripe-scroll {
+  position: relative;
+  overflow: hidden;
+  transform: translateX(-100%) skewY(-0.5deg) scaleX(0);
+  transform-origin: left center;
+  opacity: 0;
+  transition: none;
+}
+
+.yellow-stripe-scroll.animate {
+  animation: unrollStripe 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation-fill-mode: forwards;
+}
+
+/* Ensure final state is crisp and clear */
+.yellow-stripe-scroll.animate {
+  animation-fill-mode: forwards;
+}
+
+.yellow-stripe-scroll.animate:not(:hover) {
+  filter: none !important;
+  -webkit-filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.yellow-stripe-scroll.animate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    transparent 30%, 
+    transparent 70%, 
+    rgba(255, 255, 255, 0.3) 100%);
+  animation: rollEffect 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.yellow-stripe-scroll.animate::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  animation: stripeGlow 3s ease-in-out infinite 1.8s;
+}
+
+.yellow-stripe-enhanced {
+  position: relative;
+  overflow: hidden;
+  animation: unrollStripe 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.yellow-stripe-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    transparent 30%, 
+    transparent 70%, 
+    rgba(255, 255, 255, 0.3) 100%);
+  animation: rollEffect 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.yellow-stripe-enhanced::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  animation: stripeGlow 3s ease-in-out infinite 1.8s;
+}
+
+/* Paper Roll Animation */
+@keyframes paperRoll {
+  0% {
+    transform: rotate(12deg) scaleX(3) scaleY(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: rotate(8deg) scaleX(2) scaleY(0.9);
+    opacity: 0.6;
+  }
+  100% {
+    transform: rotate(12deg) scaleX(1) scaleY(1);
+    opacity: 0.4;
+  }
+}
+
+@keyframes rollHighlight {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 0.3;
+  }
+}
+
+@keyframes bottomShadow {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0.2;
+  }
+}
+
+/* Enhanced Roll Effects */
+.yellow-stripe-enhanced > div:nth-child(1) {
+  animation: paperRoll 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.yellow-stripe-enhanced > div:nth-child(2) {
+  animation: rollHighlight 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.yellow-stripe-enhanced > div:nth-child(3) {
+  animation: bottomShadow 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Scroll-triggered Roll Effects */
+.yellow-stripe-scroll > div:nth-child(1) {
+  transform: rotate(12deg) scaleX(3) scaleY(0.8);
+  opacity: 0.8;
+  transition: none;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(1) {
+  animation: paperRoll 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.yellow-stripe-scroll > div:nth-child(2) {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: none;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(2) {
+  animation: rollHighlight 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.yellow-stripe-scroll > div:nth-child(3) {
+  transform: scaleX(0);
+  opacity: 0;
+  transition: none;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(3) {
+  animation: bottomShadow 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Particle Animations */
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-10px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Texture Line Animation */
+@keyframes textureReveal {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0.2;
+  }
+}
+
+/* Apply animations to particles */
+.yellow-stripe-enhanced > div:nth-child(4) > div:nth-child(1) {
+  animation: particleFloat 2s ease-out 0.5s;
+}
+
+.yellow-stripe-enhanced > div:nth-child(4) > div:nth-child(2) {
+  animation: particleFloat 2s ease-out 0.8s;
+}
+
+.yellow-stripe-enhanced > div:nth-child(4) > div:nth-child(3) {
+  animation: particleFloat 2s ease-out 1.2s;
+}
+
+/* Apply animations to texture lines */
+.yellow-stripe-enhanced > div:nth-child(5) > div {
+  animation: textureReveal 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.yellow-stripe-enhanced > div:nth-child(5) > div:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.yellow-stripe-enhanced > div:nth-child(5) > div:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.yellow-stripe-enhanced > div:nth-child(5) > div:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+.yellow-stripe-enhanced > div:nth-child(5) > div:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
+/* Scroll-triggered Particle Animations */
+.yellow-stripe-scroll > div:nth-child(4) > div {
+  transform: translateY(0) scale(0);
+  opacity: 0;
+  transition: none;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(4) > div:nth-child(1) {
+  animation: particleFloat 2s ease-out 0.5s;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(4) > div:nth-child(2) {
+  animation: particleFloat 2s ease-out 0.8s;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(4) > div:nth-child(3) {
+  animation: particleFloat 2s ease-out 1.2s;
+}
+
+/* Scroll-triggered Texture Line Animations */
+.yellow-stripe-scroll > div:nth-child(5) > div {
+  transform: scaleX(0);
+  opacity: 0;
+  transition: none;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(5) > div {
+  animation: textureReveal 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(5) > div:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(5) > div:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(5) > div:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+.yellow-stripe-scroll.animate > div:nth-child(5) > div:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
+/* Staggered animation delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+
+/* Enhanced hover effects */
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Parallax effect for background elements */
+.parallax-element {
+  will-change: transform;
+}
+
+
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Hero Background Enhancements */
+.hero-background {
+  background: 
+    linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.85) 50%, rgba(0,0,0,0.95) 100%),
+    linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+  background-size: 100% 100%, 200px 200px;
+}
+
+/* Diamond Pattern Background - Enhanced Visibility */
+.diamond-pattern {
+  background-image: 
+    linear-gradient(45deg, #2a2a2a 25%, transparent 25%, transparent 75%, #2a2a2a 75%, #2a2a2a),
+    linear-gradient(-45deg, #2a2a2a 25%, transparent 25%, transparent 75%, #2a2a2a 75%, #2a2a2a);
+  background-size: 60px 60px;
+  background-position: 0 0, 30px 30px;
+  opacity: 0.8;
+  animation: diamondMove 20s linear infinite;
+}
+
+/* Moving Diamonds Layer - Enhanced */
+.moving-diamonds {
+  background-image: 
+    linear-gradient(45deg, rgba(212, 175, 55, 0.15) 25%, transparent 25%, transparent 75%, rgba(212, 175, 55, 0.15) 75%),
+    linear-gradient(-45deg, rgba(212, 175, 55, 0.08) 25%, transparent 25%, transparent 75%, rgba(212, 175, 55, 0.08) 75%);
+  background-size: 100px 100px;
+  background-position: 0 0, 50px 50px;
+  opacity: 0.5;
+  animation: diamondMoveReverse 30s linear infinite;
+}
+
+/* Diamond Animation - Enhanced */
+@keyframes diamondMove {
+  0% { 
+    background-position: 0 0, 30px 30px; 
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% { 
+    background-position: 60px 60px, 90px 90px; 
+    opacity: 0.8;
+  }
+}
+
+@keyframes diamondMoveReverse {
+  0% { 
+    background-position: 0 0, 50px 50px; 
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% { 
+    background-position: -100px -100px, -50px -50px; 
+    opacity: 0.5;
+  }
+}
+
+.barbershop-pattern {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.2) 3px, transparent 3px),
+    radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.15) 2px, transparent 2px),
+    linear-gradient(0deg, transparent 49%, rgba(212, 175, 55, 0.05) 50%, transparent 51%);
+  background-size: 80px 80px, 160px 160px, 40px 40px;
+  opacity: 0.6;
+  animation: patternMove 25s linear infinite;
+}
+
+@keyframes patternMove {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 60px 60px, -120px -120px; }
+}
+
+/* Barbershop Interior Elements */
+.barber-chair {
+  position: relative;
+}
+
+.barber-chair::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: chairGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes chairGlow {
+  from { opacity: 0.2; transform: translateX(-50%) scale(1); }
+  to { opacity: 0.5; transform: translateX(-50%) scale(1.2); }
+}
+
+.mirror-reflection {
+  position: relative;
+  overflow: hidden;
+}
+
+.mirror-reflection::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: mirrorShine 3s ease-in-out infinite;
+}
+
+@keyframes mirrorShine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* Enhanced lighting effects */
+.ceiling-light {
+  position: relative;
+}
+
+.ceiling-light::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(212, 175, 55, 0.3), transparent);
+  animation: lightBeam 2s ease-in-out infinite alternate;
+}
+
+@keyframes lightBeam {
+  from { height: 30px; opacity: 0.2; }
+  to { height: 50px; opacity: 0.4; }
+}
+
+/* Enhanced Background Animations */
+@keyframes backgroundShift {
+  0%, 100% { 
+    background-position: 0% 50%, 0% 0%; 
+    transform: scale(1);
+  }
+  50% { 
+    background-position: 100% 50%, 200px 200px; 
+    transform: scale(1.01);
+  }
+}
+
+.hero-background {
+  animation: backgroundShift 20s ease-in-out infinite;
+  position: relative;
+}
+
+/* Additional Background Texture */
+.hero-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(212, 175, 55, 0.02) 2px,
+      rgba(212, 175, 55, 0.02) 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(212, 175, 55, 0.02) 2px,
+      rgba(212, 175, 55, 0.02) 4px
+    );
+  opacity: 0.7;
+  z-index: 1;
+}
+
+/* Enhanced Contrast Overlay */
+.hero-background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 20%,
+    rgba(0, 0, 0, 0.1) 70%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  z-index: 2;
+}
+
+/* Spotlight Pulse Effect */
+@keyframes spotlightPulse {
+  0%, 100% { 
+    opacity: 0.05; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.15; 
+    transform: scale(1.1);
+  }
+}
+
+.spotlight {
+  animation: spotlightPulse 4s ease-in-out infinite;
+}
+
+/* Floating Particles */
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) scale(0);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(1);
+  }
+}
+
+.floating-particle {
+  animation: floatUp 8s linear infinite;
+}
+
+.floating-particle:nth-child(2) { animation-delay: 2s; }
+.floating-particle:nth-child(3) { animation-delay: 4s; }
+.floating-particle:nth-child(4) { animation-delay: 6s; }
+
+/* Barbershop Pole Animation */
+@keyframes poleRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.barber-pole {
+  animation: poleRotate 3s linear infinite;
+}
+
+.barber-pole::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    rgba(212, 175, 55, 0.3) 4px,
+    rgba(212, 175, 55, 0.3) 8px
+  );
+  border-radius: inherit;
+}
+
+/* Shimmer Effect for Tools */
+@keyframes shimmer {
+  0% { filter: brightness(1) hue-rotate(0deg); }
+  50% { filter: brightness(1.2) hue-rotate(10deg); }
+  100% { filter: brightness(1) hue-rotate(0deg); }
+}
+
+.tool-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Enhanced Section Animations */
+@keyframes gradient-shift {
+  0%, 100% { 
+    background: linear-gradient(45deg, #000, #1a1a1a, #000);
+  }
+  50% { 
+    background: linear-gradient(45deg, #1a1a1a, #000, #1a1a1a);
+  }
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 8s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) skewX(-12deg); }
+  100% { transform: translateX(200%) skewX(-12deg); }
+}
+
+.animate-shine {
+  animation: shine 3s ease-in-out infinite;
+}
+
+/* Text Shimmer Effect */
+@keyframes text-shimmer {
+  0%, 100% { 
+    background-position: 0% 50%; 
+  }
+  50% { 
+    background-position: 100% 50%; 
+  }
+}
+
+.animate-shimmer {
+  background-size: 200% 200%;
+  animation: text-shimmer 3s ease-in-out infinite;
+}
+
+/* Enhanced Stagger Delays */
+.stagger-1 { animation-delay: 0.1s; opacity: 0; animation-fill-mode: forwards; }
+.stagger-2 { animation-delay: 0.2s; opacity: 0; animation-fill-mode: forwards; }
+.stagger-3 { animation-delay: 0.3s; opacity: 0; animation-fill-mode: forwards; }
+.stagger-4 { animation-delay: 0.4s; opacity: 0; animation-fill-mode: forwards; }
+
+.animation-delay-800 { animation-delay: 0.8s; opacity: 0; animation-fill-mode: forwards; }
+.animation-delay-1000 { animation-delay: 1s; opacity: 0; animation-fill-mode: forwards; }
+
+/* Card Glow Effects */
+.card-glow {
+  position: relative;
+}
+
+.card-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--accent), transparent, var(--accent));
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  filter: blur(10px);
+}
+
+.card-glow:hover::before {
+  opacity: 0.7;
+}
+
+/* Enhanced Button Effects */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-glow:hover::before {
+  left: 100%;
+}
+
+/* Stats Counter Animation */
+@keyframes countUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-count-up {
+  animation: countUp 0.6s ease-out;
+}
+
+/* Background Pattern Enhancements */
+.pattern-dots {
+  background-image: radial-gradient(circle, var(--accent) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: patternMove 15s linear infinite;
+}
+
+.pattern-lines {
+  background-image: 
+    linear-gradient(45deg, transparent 40%, var(--accent) 50%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, var(--accent) 50%, transparent 60%);
+  background-size: 30px 30px;
+  opacity: 0.1;
+  animation: patternMove 20s linear infinite reverse;
+}
+
+/* Luxury Enhancement Styles */
+.luxury-glow {
+  position: relative;
+}
+
+.luxury-glow::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(45deg, var(--accent), transparent, var(--accent));
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  z-index: -1;
+  filter: blur(20px);
+}
+
+.luxury-glow:hover::before {
+  opacity: 0.8;
+}
+
+/* Premium Border Animation */
+@keyframes borderGlow {
+  0%, 100% { 
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+  }
+  50% { 
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+  }
+}
+
+.border-glow {
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+/* Enhanced Spotlight Effect */
+.spotlight-enhanced {
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.1;
+  animation: spotlightPulse 6s ease-in-out infinite;
+}
+
+/* Luxury Text Effects */
+.text-luxury {
+  background: linear-gradient(45deg, #fff, var(--accent), #fff, var(--accent));
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: luxuryShimmer 4s ease-in-out infinite;
+}
+
+@keyframes luxuryShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Premium Card Hover Effects */
+.premium-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  animation: rotate 4s linear infinite;
+}
+
+.premium-card:hover::before {
+  opacity: 0.1;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Enhanced Floating Animation */
+@keyframes luxuryFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-25px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(-2deg);
+  }
+}
+
+.animate-luxury-float {
+  animation: luxuryFloat 4s ease-in-out infinite;
+}
+
+/* Premium Stats Animation */
+@keyframes statsGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px var(--accent);
+  }
+  50% {
+    text-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent);
+  }
+}
+
+.stats-glow {
+  animation: statsGlow 2s ease-in-out infinite;
+}
+
+/* Luxury Button Enhancement */
+.btn-luxury {
+  position: relative;
+  background: linear-gradient(45deg, var(--accent), #f59e0b, var(--accent));
+  background-size: 200% 200%;
+  animation: luxuryGradient 3s ease-in-out infinite;
+}
+
+@keyframes luxuryGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.btn-luxury::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: inherit;
+  border-radius: inherit;
+  filter: blur(10px);
+  opacity: 0.7;
+  z-index: -1;
+}
+/* Barber Image Enhancements */
+.barber-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.barber-image-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(212, 175, 55, 0.1) 50%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  z-index: 1;
+}
+
+.barber-image-container:hover::before {
+  opacity: 1;
+}
+
+/* Professional Badge Animation */
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+  }
+}
+
+.professional-badge {
+  animation: badgePulse 2s infinite;
+}
+
+/* Enhanced Image Shine Effect */
+@keyframes imageShine {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+    opacity: 0;
+  }
+}
+
+.image-shine {
+  animation: imageShine 3s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* Barber Tools Floating Animation */
+@keyframes toolFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translateY(-8px) rotate(2deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-15px) rotate(0deg);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-5px) rotate(-2deg);
+    opacity: 0.8;
+  }
+}
+
+.tool-float {
+  animation: toolFloat 4s ease-in-out infinite;
+}
+
+.tool-float-delayed {
+  animation: toolFloat 4s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* Professional Info Box Animation */
+@keyframes infoSlideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.info-slide-up {
+  animation: infoSlideUp 0.8s ease-out;
+  animation-delay: 1s;
+  animation-fill-mode: both;
+}
+
+/* Enhanced Border Glow for Image */
+@keyframes imageBorderGlow {
+  0%, 100% {
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 
+      0 0 20px rgba(212, 175, 55, 0.1),
+      inset 0 0 20px rgba(212, 175, 55, 0.05);
+  }
+  50% {
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 
+      0 0 40px rgba(212, 175, 55, 0.3),
+      inset 0 0 30px rgba(212, 175, 55, 0.1);
+  }
+}
+
+.image-border-glow {
+  animation: imageBorderGlow 4s ease-in-out infinite;
+}
+
+/* Backdrop Blur Enhancement */
+.backdrop-blur-enhanced {
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+}
+
+/* Professional Badge Hover Effect */
+.professional-badge:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+/* Image Container Responsive Enhancements */
+@media (max-width: 768px) {
+  .barber-image-container {
+    margin-top: 2rem;
+  }
+  
+  .tool-float,
+  .tool-float-delayed {
+    font-size: 1.5rem;
+  }
+}
+
+/* Luxury Image Frame */
+.luxury-frame {
+  position: relative;
+}
+
+.luxury-frame::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(45deg, var(--accent), transparent, var(--accent));
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: -1;
+  filter: blur(15px);
+}
+
+.luxury-frame:hover::before {
+  opacity: 0.6;
+}
+
+/* Enhanced Fallback Animation */
+@keyframes fallbackPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+.fallback-content {
+  animation: fallbackPulse 2s ease-in-out infinite;
+}
+
+/* Professional Service Indicator */
+@keyframes serviceIndicator {
+  0% {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+}
+
+.service-indicator {
+  animation: serviceIndicator 3s ease-in-out infinite;
+}
+
+/* Image Loading State */
+.image-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Dark mode image enhancements */
+.dark .barber-image-container {
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.dark .professional-badge {
+  background: linear-gradient(45deg, var(--accent), #f59e0b);
+  color: #000;
+}
+
+.dark .info-slide-up {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+/* Responsive Enhancements for Barber Image */
+@media (max-width: 1024px) {
+  .barber-image-container {
+    margin-top: 3rem;
+  }
+  
+  .professional-badge {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .tool-float,
+  .tool-float-delayed {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .barber-image-container {
+    margin-top: 2rem;
+  }
+  
+  .professional-badge {
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.75rem;
+    padding: 0.375rem 0.625rem;
+  }
+  
+  .info-slide-up {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+  
+  .tool-float {
+    top: 20%;
+    left: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .tool-float-delayed {
+    bottom: 25%;
+    right: 1rem;
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .barber-image-container {
+    aspect-ratio: 1;
+  }
+  
+  .professional-badge {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .info-slide-up h3 {
+    font-size: 1rem;
+  }
+  
+  .info-slide-up p {
+    font-size: 0.75rem;
+  }
+}
+
+/* High DPI Display Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .barber-image-container img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  .tool-float,
+  .tool-float-delayed,
+  .professional-badge,
+  .image-shine,
+  .service-indicator {
+    animation: none;
+  }
+  
+  .barber-image-container:hover img {
+    transform: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .barber-image-container {
+    break-inside: avoid;
+  }
+  
+  .professional-badge,
+  .tool-float,
+  .tool-float-delayed {
+    display: none;
+  }
+}
+
+/* Focus Accessibility */
+.barber-image-container:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* Loading State Enhancement */
+.barber-image-container.loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+/* Hover State Enhancements */
+.barber-image-container:hover .professional-badge {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.barber-image-container:hover .tool-float,
+.barber-image-container:hover .tool-float-delayed {
+  animation-duration: 2s;
+}
+
+/* Color Scheme Adaptations */
+@media (prefers-color-scheme: dark) {
+  .fallback-content {
+    background: linear-gradient(135deg, #1a1a1a, #000, #1a1a1a);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .fallback-content {
+    background: linear-gradient(135deg, #f5f5f5, #e0e0e0, #f5f5f5);
+    color: #333;
+  }
+  
+  .fallback-content .text-accent {
+    color: #d4af37;
+  }
+}
+/* Executive Minimalist Design */
+.executive-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle Scale Animation */
+.group:hover .group-hover\:scale-102 {
+  transform: scale(1.02);
+}
+
+/* Executive Quality Badge */
+.executive-badge {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.executive-badge:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Executive Info Panel */
+.executive-info {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.executive-info:hover {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Minimalist Pulse Animation */
+@keyframes minimalistPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.minimalist-pulse {
+  animation: minimalistPulse 2s ease-in-out infinite;
+}
+
+/* Executive Corner Accents */
+@keyframes cornerGlow {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+.corner-accent {
+  animation: cornerGlow 3s ease-in-out infinite;
+}
+
+/* Subtle Hover Effects */
+.executive-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Executive Typography */
+.executive-text {
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  line-height: 1.4;
+}
+
+/* Minimalist Border Animation */
+@keyframes borderFade {
+  0%, 100% {
+    border-color: rgba(212, 175, 55, 0.2);
+  }
+  50% {
+    border-color: rgba(212, 175, 55, 0.4);
+  }
+}
+
+.border-fade {
+  animation: borderFade 4s ease-in-out infinite;
+}
+
+/* Executive Gradient Overlay */
+.executive-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+}
+
+/* Smooth Backdrop Blur */
+.backdrop-blur-executive {
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+}
+
+/* Executive Status Indicator */
+@keyframes statusPulse {
+  0%, 100% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0);
+  }
+}
+
+.status-indicator {
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+/* Executive Image Enhancements */
+.executive-image {
+  filter: contrast(1.05) brightness(1.02) saturate(1.1);
+  transition: filter 0.7s ease;
+}
+
+.executive-image:hover {
+  filter: contrast(1.1) brightness(1.05) saturate(1.15);
+}
+
+/* Minimalist Responsive Design */
+@media (max-width: 1024px) {
+  .executive-badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .executive-info {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .executive-badge {
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .executive-info {
+    bottom: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    padding: 0.625rem;
+  }
+  
+  .executive-info h3 {
+    font-size: 0.875rem;
+  }
+  
+  .executive-info p {
+    font-size: 0.625rem;
+  }
+}
+
+/* Executive Focus States */
+.executive-container:focus-within {
+  outline: 2px solid rgba(212, 175, 55, 0.5);
+  outline-offset: 4px;
+  border-radius: 1rem;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .minimalist-pulse,
+  .corner-accent,
+  .border-fade,
+  .status-indicator {
+    animation: none;
+  }
+  
+  .group:hover .group-hover\:scale-102 {
+    transform: none;
+  }
+  
+  .executive-hover:hover {
+    transform: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .executive-badge {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: var(--accent);
+  }
+  
+  .executive-info {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Executive Loading State */
+.executive-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 2s infinite;
+}
+
+/* Dark Mode Executive Enhancements */
+.dark .executive-badge {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.dark .executive-info {
+  background: rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Executive Performance Optimizations */
+.executive-container {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.executive-image {
+  will-change: filter, transform;
+}
+
+/* Executive Accessibility */
+.executive-container[aria-label] {
+  cursor: pointer;
+}
+
+.executive-container:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Executive Print Styles */
+@media print {
+  .executive-badge,
+  .corner-accent {
+    display: none;
+  }
+  
+  .executive-container {
+    break-inside: avoid;
+  }
+}
+/* Elegant Typography - Inspired by Barber King Indonesia */
+:root {
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+}
+
+/* Base Typography */
+body {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Elegant Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+/* Display Font for Special Elements */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Font Weight Classes */
+.font-extralight { font-weight: 200; }
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+/* Letter Spacing */
+.tracking-tighter { letter-spacing: -0.05em; }
+.tracking-tight { letter-spacing: -0.025em; }
+.tracking-normal { letter-spacing: 0; }
+.tracking-wide { letter-spacing: 0.025em; }
+.tracking-wider { letter-spacing: 0.05em; }
+.tracking-widest { letter-spacing: 0.1em; }
+
+/* Elegant Section Styling */
+.elegant-section {
+  background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+}
+
+/* Stylish Cards */
+.stylish-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stylish-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* Elegant Animations */
+@keyframes elegantFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.elegant-fade-in {
+  animation: elegantFadeIn 0.8s ease-out;
+}
+
+/* Smooth Hover Transitions */
+.elegant-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.elegant-hover:hover {
+  transform: translateY(-2px);
+}
+
+/* Stylish Buttons */
+.btn-elegant {
+  font-family: var(--font-primary);
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+  padding: 12px 32px;
+}
+
+.btn-elegant:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+/* Elegant Text Styles */
+.text-elegant {
+  font-family: var(--font-primary);
+  font-weight: 300;
+  line-height: 1.7;
+  color: #4a5568;
+}
+
+.text-elegant-dark {
+  color: #2d3748;
+}
+
+/* Stylish Borders */
+.border-elegant {
+  border-color: rgba(212, 175, 55, 0.2);
+}
+
+.border-elegant-hover:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+/* Elegant Shadows */
+.shadow-elegant {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-elegant-hover:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  
+  .text-elegant {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+}
+
+/* Elegant Grid Layouts */
+.elegant-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .elegant-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* Stylish Icon Containers */
+.icon-elegant {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  transition: all 0.3s ease;
+}
+
+.icon-elegant:hover {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+  border-color: rgba(212, 175, 55, 0.4);
+  transform: scale(1.05);
+}
+
+/* Elegant Stats Counter */
+.stats-elegant {
+  font-family: var(--font-primary);
+  font-weight: 200;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--accent);
+  transition: all 0.3s ease;
+}
+
+.stats-elegant:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+/* Elegant Section Dividers */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+  margin: 4rem 0;
+}
+
+/* Stylish Background Patterns */
+.bg-elegant-pattern {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+}
+
+/* Elegant Content Spacing */
+.content-elegant {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .content-elegant {
+    padding: 0 1rem;
+  }
+}
+
+/* Stylish Focus States */
+.focus-elegant:focus {
+  outline: 2px solid rgba(212, 175, 55, 0.5);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Elegant Loading States */
+.loading-elegant {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: elegantLoading 1.5s infinite;
+}
+
+@keyframes elegantLoading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Elegant Scroll Behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Stylish Selection */
+::selection {
+  background: rgba(212, 175, 55, 0.2);
+  color: #2d3748;
+}
+
+::-moz-selection {
+  background: rgba(212, 175, 55, 0.2);
+  color: #2d3748;
+}
+
+/* Elegant Print Styles */
+@media print {
+  .elegant-section {
+    background: white !important;
+  }
+  
+  .stylish-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Dark Mode Elegant Styles */
+@media (prefers-color-scheme: dark) {
+  .elegant-section {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+  
+  .stylish-card {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .text-elegant {
+    color: #a0aec0;
+  }
+  
+  .text-elegant-dark {
+    color: #e2e8f0;
+  }
+}
+/* Refined Diagonal Stripe */
+.-skew-y-0\.5 {
+  --tw-skew-y: -0.5deg;
+  transform: skewY(-0.5deg);
+}
+
+/* Better Text Formatting */
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+/* Improved Section Spacing */
+.section-refined {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+/* Better Typography Hierarchy */
+.text-hierarchy-1 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.text-hierarchy-2 {
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.text-hierarchy-3 {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Refined Yellow Accent */
+.bg-yellow-refined {
+  background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+}
+
+/* Better Card Spacing */
+.card-refined {
+  padding: 2rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-refined:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Improved Grid Gaps */
+.grid-refined {
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .grid-refined {
+    gap: 1.5rem;
+  }
+}
+
+/* Better Icon Sizing */
+.icon-refined {
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+}
+
+/* Refined Stats Layout */
+.stats-refined {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.stats-refined::before {
+  content: '';
+  position: absolute;
+  top: -0.75rem;
+  left: -0.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid #FCD34D;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+/* Better Image Containers */
+.image-refined {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.image-refined:hover {
+  transform: scale(1.02);
+}
+
+/* Refined Responsive Typography */
+@media (max-width: 768px) {
+  .text-hierarchy-1 {
+    font-size: 2.25rem;
+  }
+  
+  .text-hierarchy-2 {
+    font-size: 1rem;
+  }
+  
+  .-skew-y-0\.5 {
+    --tw-skew-y: -0.25deg;
+    transform: skewY(-0.25deg);
+  }
+}
+
+/* Better Section Transitions */
+.section-transition {
+  position: relative;
+}
+
+.section-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(252, 211, 77, 0.3), transparent);
+}
+
+/* Improved Content Spacing */
+.content-refined {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .content-refined {
+    padding: 0 2rem;
+  }
+}
+
+/* Better Button Styling */
+.btn-refined {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-refined:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(252, 211, 77, 0.4);
+}
+
+/* Refined Grid System */
+.grid-system-refined {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .grid-system-refined {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+/* Barber Background Section */
+.barber-bg-section {
+    background: linear-gradient(rgba(31, 41, 55, 0.7), rgba(31, 41, 55, 0.7)), url('/images/bg-barber.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Excellence Background Section */
+.excellence-bg-section {
+    background: linear-gradient(rgba(31, 41, 55, 0.8), rgba(31, 41, 55, 0.8)), url('/images/bg-barber.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+/* Line 
+Clamp Utilities untuk Konsistensi Layout Barber Cards */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+/* Barber Card Layout Consistency */
+.barber-card-container {
+  height: 620px;
+  display: flex;
+  flex-direction: column;
+}
+
+.barber-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.barber-card-footer {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+/* Ensure consistent spacing and sizing */
+.barber-photo-section {
+  flex-shrink: 0;
+  height: auto;
+}
+
+.barber-info-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.barber-skills-section {
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.barber-bio-section {
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 
+Barber Card Enhancements - Modern Design */
+.barber-card-container {
+  height: 480px;
+}
+
+/* Line Clamp Utilities untuk Text Truncation */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* Enhanced Card Hover Effects */
+.barber-card {
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.barber-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Professional Badge Animations */
+.professional-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.professional-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.professional-badge:hover::before {
+  left: 100%;
+}
+
+/* Enhanced Photo Container */
+.barber-photo-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.barber-photo-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(252, 211, 77, 0.1) 50%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.barber-photo-container:hover::after {
+  opacity: 1;
+}
+
+/* Skill Tags Animation */
+.skill-tag {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.skill-tag:hover {
+  transform: scale(1.05);
+  background-color: rgba(252, 211, 77, 0.2);
+}
+
+/* Rating Stars Enhancement */
+.rating-star {
+  transition: all 0.2s ease;
+  filter: drop-shadow(0 1px 2px rgba(252, 211, 77, 0.3));
+}
+
+.rating-star:hover {
+  transform: scale(1.1);
+}
+
+/* Button Enhancement */
+.barber-action-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(45deg, #FCD34D, #F59E0B);
+  transition: all 0.3s ease;
+}
+
+.barber-action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.barber-action-btn:hover::before {
+  left: 100%;
+}
+
+.barber-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(252, 211, 77, 0.4);
+}
+
+/* Responsive Grid Enhancements */
+@media (max-width: 768px) {
+  .barber-card-container {
+    height: 420px;
+  }
+  
+  .barber-photo-container {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .barber-card-container {
+    height: 380px;
+  }
+}
+
+/* Enhanced Shadow Effects */
+.shadow-3xl {
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Card Border Glow Animation */
+@keyframes borderPulse {
+  0%, 100% {
+    border-color: rgba(252, 211, 77, 0.3);
+    box-shadow: 0 0 20px rgba(252, 211, 77, 0.1);
+  }
+  50% {
+    border-color: rgba(252, 211, 77, 0.6);
+    box-shadow: 0 0 40px rgba(252, 211, 77, 0.3);
+  }
+}
+
+.border-pulse {
+  animation: borderPulse 3s ease-in-out infinite;
+}
+
+/* Staggered Animation for Cards */
+.barber-card:nth-child(1) { animation-delay: 0.1s; }
+.barber-card:nth-child(2) { animation-delay: 0.2s; }
+.barber-card:nth-child(3) { animation-delay: 0.3s; }
+.barber-card:nth-child(4) { animation-delay: 0.4s; }
+.barber-card:nth-child(5) { animation-delay: 0.5s; }
+.barber-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Enhanced Backdrop Blur */
+.backdrop-blur-enhanced {
+  backdrop-filter: blur(12px) saturate(180%) brightness(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(180%) brightness(1.1);
+}
+
+/* Professional Level Indicators */
+.level-master {
+  background: linear-gradient(135deg, #FCD34D, #F59E0B);
+  box-shadow: 0 4px 15px rgba(252, 211, 77, 0.4);
+}
+
+.level-senior {
+  background: linear-gradient(135deg, #60A5FA, #3B82F6);
+  box-shadow: 0 4px 15px rgba(96, 165, 250, 0.4);
+}
+
+.level-professional {
+  background: linear-gradient(135deg, #34D399, #10B981);
+  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4);
+}
+
+.level-junior {
+  background: linear-gradient(135deg, #A78BFA, #8B5CF6);
+  box-shadow: 0 4px 15px rgba(167, 139, 250, 0.4);
+}
+
+/* Card Content Spacing */
+.barber-card-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.barber-card-header {
+  flex-shrink: 0;
+}
+
+.barber-card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.barber-card-footer {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+/* Enhanced Text Hierarchy */
+.barber-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.barber-specialty {
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.barber-info {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+/* Smooth Transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading State for Images */
+.barber-image-loading {
+  background: linear-gradient(90deg, #374151 25%, #4B5563 50%, #374151 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Focus States for Accessibility */
+.barber-action-btn:focus {
+  outline: 2px solid #FCD34D;
+  outline-offset: 2px;
+}
+
+.barber-card:focus-within {
+  outline: 2px solid #FCD34D;
+  outline-offset: 4px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .barber-card {
+    border-width: 2px;
+    border-color: #FCD34D;
+  }
+  
+  .barber-name {
+    color: #FFFFFF;
+  }
+  
+  .barber-specialty {
+    color: #FCD34D;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .barber-card,
+  .barber-photo-container,
+  .professional-badge,
+  .barber-action-btn {
+    transition: none;
+    animation: none;
+  }
+  
+  .barber-card:hover {
+    transform: none;
+  }
+}/* 
+Enhanced Barber Card Design - Sesuai Gambar Referensi */
+.barber-card-modern {
+  height: 520px;
+  background: linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(0, 0, 0, 0.9), rgba(17, 24, 39, 0.95));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Border Width Utilities */
+.border-3 {
+  border-width: 3px;
+}
+
+/* Enhanced Shadow Effects */
+.shadow-3xl {
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* Professional Card Hover Effects */
+.barber-card-hover {
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.barber-card-hover:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 40px 80px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Photo Container Enhancement */
+.barber-photo-modern {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #374151, #1f2937);
+}
+
+.barber-photo-modern::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(252, 211, 77, 0.1) 50%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.barber-photo-modern:hover::after {
+  opacity: 1;
+}
+
+/* Badge Enhancement */
+.professional-badge-modern {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.professional-badge-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.professional-badge-modern:hover::before {
+  left: 100%;
+}
+
+/* Rating Stars Enhancement */
+.rating-stars-modern {
+  filter: drop-shadow(0 2px 4px rgba(252, 211, 77, 0.3));
+}
+
+.rating-star-modern {
+  transition: all 0.2s ease;
+}
+
+.rating-star-modern:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 2px 8px rgba(252, 211, 77, 0.6));
+}
+
+/* Button Enhancement - Modern Gradient */
+.barber-action-btn-modern {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #FCD34D, #F59E0B, #D97706);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.barber-action-btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.6s ease;
+}
+
+.barber-action-btn-modern:hover::before {
+  left: 100%;
+}
+
+.barber-action-btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(252, 211, 77, 0.4);
+}
+
+.barber-action-btn-modern:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Skill Tags Modern Design */
+.skill-tag-modern {
+  background: rgba(55, 65, 81, 0.6);
+  border: 1px solid rgba(75, 85, 99, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.skill-tag-modern:hover {
+  background: rgba(75, 85, 99, 0.8);
+  border-color: rgba(252, 211, 77, 0.5);
+  color: #FCD34D;
+  transform: translateY(-1px);
+}
+
+/* Text Hierarchy Enhancement */
+.barber-name-modern {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.barber-specialty-modern {
+  font-size: 0.75rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.barber-info-modern {
+  font-size: 0.875rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+/* Card Content Layout */
+.barber-card-content-modern {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.barber-card-header-modern {
+  flex-shrink: 0;
+}
+
+.barber-card-body-modern {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.barber-card-footer-modern {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+/* Responsive Enhancements */
+@media (max-width: 1024px) {
+  .barber-card-modern {
+    height: 500px;
+  }
+  
+  .barber-name-modern {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .barber-card-modern {
+    height: 480px;
+  }
+  
+  .barber-name-modern {
+    font-size: 1rem;
+  }
+  
+  .barber-info-modern {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .barber-card-modern {
+    height: 460px;
+  }
+}
+
+/* Loading State Enhancement */
+.barber-image-loading-modern {
+  background: linear-gradient(90deg, #374151 25%, #4B5563 50%, #374151 75%);
+  background-size: 200% 100%;
+  animation: shimmerModern 1.5s infinite;
+}
+
+@keyframes shimmerModern {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Accessibility Enhancements */
+.barber-action-btn-modern:focus {
+  outline: 3px solid #FCD34D;
+  outline-offset: 2px;
+}
+
+.barber-card-modern:focus-within {
+  outline: 2px solid #FCD34D;
+  outline-offset: 4px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .barber-card-modern {
+    border: 2px solid #FCD34D;
+    background: #000000;
+  }
+  
+  .barber-name-modern {
+    color: #FFFFFF;
+  }
+  
+  .barber-specialty-modern {
+    color: #FCD34D;
+    background: #000000;
+    border-color: #FCD34D;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .barber-card-hover,
+  .barber-photo-modern,
+  .professional-badge-modern,
+  .barber-action-btn-modern,
+  .rating-star-modern {
+    transition: none;
+    animation: none;
+  }
+  
+  .barber-card-hover:hover {
+    transform: none;
+  }
+  
+  .barber-action-btn-modern {
+    animation: none;
+  }
+}
+
+/* Staggered Animation for Cards */
+.barber-card-modern:nth-child(1) { 
+  animation: fadeInUp 0.8s ease-out 0.1s both; 
+}
+.barber-card-modern:nth-child(2) { 
+  animation: fadeInUp 0.8s ease-out 0.2s both; 
+}
+.barber-card-modern:nth-child(3) { 
+  animation: fadeInUp 0.8s ease-out 0.3s both; 
+}
+.barber-card-modern:nth-child(4) { 
+  animation: fadeInUp 0.8s ease-out 0.4s both; 
+}
+.barber-card-modern:nth-child(5) { 
+  animation: fadeInUp 0.8s ease-out 0.5s both; 
+}
+.barber-card-modern:nth-child(6) { 
+  animation: fadeInUp 0.8s ease-out 0.6s both; 
+}
+
+/* Enhanced Fade In Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Grid Gap Enhancement */
+.barber-grid-modern {
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .barber-grid-modern {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .barber-grid-modern {
+    gap: 1rem;
+  }
+}/
+* BARBER CARD UNIFORM DESIGN - Ukuran Seragam & Konsisten */
+
+/* Container utama untuk memastikan ukuran seragam */
+.barber-card-uniform {
+  min-height: 480px;
+  max-height: 480px;
+}
+
+.barber-card-container {
+  /* Fixed height untuk konsistensi MUTLAK */
+  height: 480px !important;
+  min-height: 480px !important;
+  max-height: 480px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Section-specific heights untuk konsistensi */
+.barber-photo-section {
+  height: 140px !important;
+  min-height: 140px !important;
+  max-height: 140px !important;
+  flex-shrink: 0 !important;
+}
+
+.barber-content-section {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.barber-name-section {
+  height: 70px !important;
+  min-height: 70px !important;
+  max-height: 70px !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+}
+
+.barber-rating-section {
+  height: 45px !important;
+  min-height: 45px !important;
+  max-height: 45px !important;
+  flex-shrink: 0 !important;
+}
+
+.barber-info-section {
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.barber-action-section {
+  flex-shrink: 0 !important;
+  margin-top: auto !important;
+}
+
+/* Line Clamp Utilities untuk Text Truncation */
+.line-clamp-1 {
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 1 !important;
+  line-clamp: 1 !important;
+}
+
+.line-clamp-2 {
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+}
+
+/* Responsive Design - Ukuran Card Tetap Konsisten */
+@media (max-width: 1024px) {
+  .barber-card-container {
+    height: 480px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .barber-card-container {
+    height: 480px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .barber-card-container {
+    height: 480px !important;
+  }
+  
+  /* Adjust spacing untuk mobile */
+  .barber-photo-section {
+    height: 130px !important;
+    min-height: 130px !important;
+    max-height: 130px !important;
+  }
+  
+  .barber-name-section {
+    height: 65px !important;
+    min-height: 65px !important;
+    max-height: 65px !important;
+  }
+}
+
+/* Enhanced Card Styling */
+.barber-card-container {
+  background: linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(0, 0, 0, 0.9), rgba(17, 24, 39, 0.95)) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Hover Effects */
+.barber-card-uniform:hover .barber-card-container {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Button Styling */
+.barber-action-section button {
+  background: linear-gradient(135deg, #FCD34D, #F59E0B) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.barber-action-section button:hover {
+  background: linear-gradient(135deg, #F59E0B, #D97706) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 25px rgba(252, 211, 77, 0.4) !important;
+}
+
+/* Photo Container Enhancement */
+.barber-photo-section .w-\[100px\] {
+  transition: all 0.3s ease !important;
+}
+
+.barber-card-uniform:hover .barber-photo-section .w-\[100px\] {
+  transform: scale(1.05) !important;
+}
+
+/* Text Hierarchy */
+.barber-name-section h3 {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+.barber-rating-section {
+  font-size: 0.75rem !important;
+}
+
+.barber-info-section {
+  font-size: 0.75rem !important;
+}
+
+/* Skill Tags Styling */
+.barber-info-section span {
+  background: rgba(55, 65, 81, 0.6) !important;
+  border: 1px solid rgba(75, 85, 99, 0.5) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  transition: all 0.2s ease !important;
+}
+
+.barber-info-section span:hover {
+  background: rgba(75, 85, 99, 0.8) !important;
+  border-color: rgba(252, 211, 77, 0.5) !important;
+  color: #FCD34D !important;
+}
+
+/* Loading State */
+.barber-image-loading {
+  background: linear-gradient(90deg, #374151 25%, #4B5563 50%, #374151 75%) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer 1.5s infinite !important;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Accessibility */
+.barber-action-section button:focus {
+  outline: 2px solid #FCD34D !important;
+  outline-offset: 2px !important;
+}
+
+.barber-card-container:focus-within {
+  outline: 2px solid #FCD34D !important;
+  outline-offset: 4px !important;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .barber-card-container {
+    border: 2px solid #FCD34D !important;
+    background: #000000 !important;
+  }
+  
+  .barber-name-section h3 {
+    color: #FFFFFF !important;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .barber-card-uniform,
+  .barber-photo-section .w-\[100px\],
+  .barber-action-section button {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .barber-card-uniform:hover .barber-card-container {
+    transform: none !important;
+  }
+}
+
+/* Grid Gap Consistency */
+.grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+  gap: 1.5rem !important;
+}
+
+@media (max-width: 768px) {
+  .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+    gap: 1rem !important;
+  }
+}
+
+/* Ensure all cards have same width */
+.barber-card-uniform {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Force consistent spacing */
+.barber-content-section > * {
+  margin-bottom: 0.75rem;
+}
+
+.barber-content-section > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Prevent content overflow */
+.barber-card-container * {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ===== KAPSTER CARD UNIFORM STYLING - CRITICAL FIXES ===== */
+
+/* 1. Grid Container - Ensures Equal Card Heights */
+.barber-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  grid-auto-rows: 1fr; /* CRITICAL: Forces all cards to same height */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 2. Uniform Card Container - Fixed Height & Consistent Styling */
+.barber-card-uniform {
+  height: 100%; /* Takes full grid cell height */
+  min-height: 480px; /* Minimum height fallback */
+}
+
+.barber-card-container {
+  height: 100% !important; /* Override any conflicting heights */
+  min-height: 450px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  
+  /* Enhanced Card Background - Distinct from Page Background */
+  background: linear-gradient(135deg, 
+    rgba(30, 30, 30, 0.95) 0%, 
+    rgba(20, 20, 20, 0.98) 50%, 
+    rgba(15, 15, 15, 0.95) 100%) !important;
+  
+  /* Professional Card Styling */
+  border: 1px solid rgba(75, 85, 99, 0.4) !important;
+  border-radius: 1rem !important;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.3),
+    0 4px 10px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  
+  /* Smooth Transitions */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.barber-card-container:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(252, 211, 77, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(252, 211, 77, 0.3) !important;
+}
+
+/* 3. Fixed Section Heights - Prevents Content Shifting */
+.barber-photo-section {
+  height: 160px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1rem !important;
+}
+
+.barber-name-section {
+  height: 70px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.barber-rating-section {
+  height: 45px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin-bottom: 0.75rem !important;
+}
+
+
+
+/* 4. Content Section - Flexible Height */
+.barber-content-section {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 1.25rem 1.25rem 1.25rem !important;
+}
+
+.barber-info-section {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  gap: 0.5rem !important;
+  margin-bottom: 1rem !important;
+  min-height: 80px !important;
+}
+
+/* 5. Photo Consistency - Enlarged Size & Aspect Ratio */
+.barber-photo-section .w-\[130px\] {
+  width: 130px !important;
+  height: 130px !important;
+  flex-shrink: 0 !important;
+}
+
+.barber-photo-section img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* 6. Text Content Clamping - Prevents Overflow */
+.barber-name-section h3 {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  line-height: 1.3 !important;
+}
+
+.barber-name-section span {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.barber-info-section span {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  line-height: 1.4 !important;
+}
+
+
+
+/* 8. Responsive Grid Adjustments */
+@media (max-width: 1024px) {
+  .barber-cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  
+  .barber-card-container {
+    min-height: 460px !important;
+  }
+  
+  .barber-photo-section {
+    height: 150px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .barber-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 400px;
+  }
+  
+  .barber-card-container {
+    min-height: 420px !important;
+  }
+  
+  .barber-photo-section {
+    height: 140px !important;
+  }
+  
+  .barber-name-section {
+    height: 60px !important;
+  }
+  
+  .barber-rating-section {
+    height: 40px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .barber-cards-grid {
+    max-width: 320px;
+  }
+  
+  .barber-card-container {
+    min-height: 400px !important;
+  }
+  
+  .barber-photo-section {
+    height: 130px !important;
+  }
+}
+
+/* 9. Enhanced Background Separation */
+.barber-showcase-section {
+  background: linear-gradient(135deg, 
+    rgba(17, 24, 39, 0.95) 0%, 
+    rgba(0, 0, 0, 0.98) 50%, 
+    rgba(17, 24, 39, 0.95) 100%);
+  
+  /* Subtle Pattern Overlay */
+  position: relative;
+}
+
+.barber-showcase-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(252, 211, 77, 0.03) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(252, 211, 77, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px, 40px 40px;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* 10. Level Badge Consistency */
+.barber-photo-section .absolute {
+  min-width: 60px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 11. Skills/Services Consistency */
+.barber-info-section .flex-wrap {
+  max-height: 60px !important;
+  overflow: hidden !important;
+}
+
+.barber-info-section .flex-wrap span {
+  font-size: 0.75rem !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 0.375rem !important;
+  background: rgba(55, 65, 81, 0.6) !important;
+  border: 1px solid rgba(75, 85, 99, 0.4) !important;
+  color: rgba(209, 213, 219, 1) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 12. Rating Stars Consistency */
+.barber-rating-section svg {
+  width: 14px !important;
+  height: 14px !important;
+  margin-right: 2px !important;
+}
+
+/* 13. No Barbers Message Enhancement */
+.no-barbers-message {
+  background: rgba(30, 30, 30, 0.8) !important;
+  border: 1px solid rgba(75, 85, 99, 0.3) !important;
+  border-radius: 1rem !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* 14. Animation Performance Optimization */
+.barber-card-container * {
+  will-change: auto !important;
+}
+
+.barber-card-container:hover * {
+  will-change: transform !important;
+}
+
+/* 15. Focus States for Accessibility */
+.barber-card-container:focus-within {
+  border-color: rgba(252, 211, 77, 0.5) !important;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(252, 211, 77, 0.3) !important;
+}
+
+/* ===== END KAPSTER CARD UNIFORM STYLING ===== */
+/* =
+==== AUTO-ADJUSTING TEXT INFO SECTIONS - CRITICAL FIXES ===== */
+
+/* 1. Remove Fixed Heights for Text Sections */
+.barber-name-section {
+  min-height: 60px !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin-bottom: 0.75rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* 2. Specialty Container - Auto Adjusting */
+.specialty-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 0.25rem !important;
+}
+
+.specialty-container span {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+}
+
+/* 3. Info Section - Flexible Content Areas */
+.barber-info-section {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  gap: 0.5rem !important;
+  margin-bottom: 1rem !important;
+  min-height: 100px !important;
+  max-height: 200px !important;
+  overflow-y: auto !important;
+}
+
+/* 4. Individual Info Items - Auto Height */
+.schedule-info,
+.experience-info,
+.bio-info {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  min-height: auto !important;
+}
+
+.schedule-info span,
+.experience-info span {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.4 !important;
+}
+
+/* 5. Bio Text - Scrollable Container */
+.bio-text {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-y: auto !important;
+  max-height: 4rem !important;
+  line-height: 1.4 !important;
+  padding-right: 0.25rem !important;
+}
+
+/* 6. Skills Section - Auto Wrapping */
+.skills-info {
+  margin-top: 0.5rem !important;
+}
+
+.skills-info .flex-wrap {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.skills-info span {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  font-size: 0.75rem !important;
+  padding: 0.25rem 0.5rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* 7. Custom Scrollbar for Bio Text */
+.bio-text::-webkit-scrollbar {
+  width: 3px !important;
+}
+
+.bio-text::-webkit-scrollbar-track {
+  background: rgba(75, 85, 99, 0.2) !important;
+  border-radius: 2px !important;
+}
+
+.bio-text::-webkit-scrollbar-thumb {
+  background: rgba(252, 211, 77, 0.3) !important;
+  border-radius: 2px !important;
+}
+
+.bio-text::-webkit-scrollbar-thumb:hover {
+  background: rgba(252, 211, 77, 0.5) !important;
+}
+
+/* 8. Card Container Adjustments */
+.barber-card-container {
+  min-height: 450px !important;
+  max-height: 500px !important;
+  overflow: hidden !important;
+}
+
+/* 9. Content Section Flex Management */
+.barber-content-section {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 1.25rem 1.25rem 1.25rem !important;
+  overflow: hidden !important;
+}
+
+/* 10. Rating Section - Keep Fixed for Consistency */
+.barber-rating-section {
+  height: 45px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* 11. Responsive Adjustments for Auto Text */
+@media (max-width: 1024px) {
+  .barber-card-container {
+    min-height: 440px !important;
+    max-height: 480px !important;
+  }
+  
+  .barber-info-section {
+    max-height: 180px !important;
+  }
+  
+  .bio-text {
+    max-height: 3.5rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .barber-card-container {
+    min-height: 420px !important;
+    max-height: 460px !important;
+  }
+  
+  .barber-name-section {
+    min-height: 50px !important;
+  }
+  
+  .barber-info-section {
+    max-height: 160px !important;
+  }
+  
+  .bio-text {
+    max-height: 3rem !important;
+  }
+  
+  .skills-info span {
+    font-size: 0.625rem !important;
+    padding: 0.125rem 0.375rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .barber-card-container {
+    min-height: 400px !important;
+    max-height: 440px !important;
+  }
+  
+  .barber-info-section {
+    max-height: 140px !important;
+  }
+  
+  .bio-text {
+    max-height: 2.5rem !important;
+  }
+}
+
+/* 12. Text Overflow Handling */
+.text-auto-adjust {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+}
+
+/* 13. Smooth Transitions for Dynamic Content */
+.barber-info-section,
+.specialty-container,
+.skills-info {
+  transition: all 0.3s ease !important;
+}
+
+/* 14. Focus States for Scrollable Content */
+.bio-text:focus {
+  outline: 1px solid rgba(252, 211, 77, 0.5) !important;
+  outline-offset: 1px !important;
+}
+
+/* 15. Ensure Grid Consistency Despite Dynamic Content */
+.barber-cards-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+  gap: 1.5rem !important;
+  grid-auto-rows: minmax(450px, auto) !important;
+  align-items: stretch !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+}
+
+/* ===== END AUTO-ADJUSTING TEXT INFO SECTIONS ===== *//* =
+==== ADDITIONAL TEXT HANDLING & STABILITY FIXES ===== */
+
+/* 1. Long Text Handling for Specialty */
+.barber-name-section h3 {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  line-height: 1.3 !important;
+  max-width: 100% !important;
+}
+
+/* 2. Specialty Badge Text Wrapping */
+.specialty-container span {
+  display: inline-block !important;
+  max-width: 100% !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+}
+
+/* 3. Skills Container Stability */
+.skills-info .flex-wrap {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.25rem !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+
+/* 4. Bio Text Enhanced Readability */
+.bio-text {
+  text-align: left !important;
+  font-size: 0.75rem !important;
+  color: rgba(209, 213, 219, 0.9) !important;
+  padding: 0.25rem 0.5rem 0.25rem 0 !important;
+  border-radius: 0.25rem !important;
+}
+
+/* 5. Info Section Scroll Behavior */
+.barber-info-section {
+  scroll-behavior: smooth !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(252, 211, 77, 0.3) rgba(75, 85, 99, 0.2) !important;
+}
+
+.barber-info-section::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+.barber-info-section::-webkit-scrollbar-track {
+  background: rgba(75, 85, 99, 0.2) !important;
+  border-radius: 2px !important;
+}
+
+.barber-info-section::-webkit-scrollbar-thumb {
+  background: rgba(252, 211, 77, 0.3) !important;
+  border-radius: 2px !important;
+}
+
+.barber-info-section::-webkit-scrollbar-thumb:hover {
+  background: rgba(252, 211, 77, 0.5) !important;
+}
+
+/* 6. Content Overflow Protection */
+.barber-content-section {
+  position: relative !important;
+}
+
+.barber-content-section::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 1rem !important;
+  background: linear-gradient(to bottom, transparent, rgba(20, 20, 20, 0.8)) !important;
+  pointer-events: none !important;
+  border-radius: 0 0 1rem 1rem !important;
+}
+
+/* 7. Dynamic Content Animation */
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.schedule-info,
+.experience-info,
+.bio-info,
+.skills-info {
+  animation: contentFadeIn 0.5s ease-out !important;
+}
+
+.schedule-info {
+  animation-delay: 0.1s !important;
+}
+
+.experience-info {
+  animation-delay: 0.2s !important;
+}
+
+.bio-info {
+  animation-delay: 0.3s !important;
+}
+
+.skills-info {
+  animation-delay: 0.4s !important;
+}
+
+/* 8. Text Selection Styling */
+.bio-text::selection,
+.schedule-info span::selection,
+.experience-info span::selection {
+  background: rgba(252, 211, 77, 0.3) !important;
+  color: white !important;
+}
+
+/* 9. Hover Effects for Info Items */
+.schedule-info:hover,
+.experience-info:hover,
+.bio-info:hover {
+  background: rgba(252, 211, 77, 0.05) !important;
+  border-radius: 0.375rem !important;
+  padding: 0.25rem !important;
+  margin: -0.25rem !important;
+  margin-bottom: 0.25rem !important;
+  transition: all 0.2s ease !important;
+}
+
+/* 10. Skills Hover Enhancement */
+.skills-info span:hover {
+  background: rgba(252, 211, 77, 0.2) !important;
+  border-color: rgba(252, 211, 77, 0.4) !important;
+  transform: scale(1.05) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* 11. Loading State for Dynamic Content */
+.content-loading {
+  background: linear-gradient(90deg, 
+    rgba(75, 85, 99, 0.1) 25%, 
+    rgba(75, 85, 99, 0.2) 50%, 
+    rgba(75, 85, 99, 0.1) 75%) !important;
+  background-size: 200% 100% !important;
+  animation: contentLoading 1.5s infinite !important;
+}
+
+@keyframes contentLoading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 12. Accessibility Improvements */
+.bio-text[tabindex="0"]:focus {
+  outline: 2px solid rgba(252, 211, 77, 0.5) !important;
+  outline-offset: 2px !important;
+  background: rgba(252, 211, 77, 0.05) !important;
+}
+
+/* 13. Print Styles for Text Content */
+@media print {
+  .bio-text {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  .barber-info-section {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  .skills-info .flex-wrap {
+    display: block !important;
+  }
+  
+  .skills-info span {
+    display: inline !important;
+    margin-right: 0.5rem !important;
+  }
+}
+
+/* 14. High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .bio-text {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid rgba(252, 211, 77, 0.5) !important;
+  }
+  
+  .schedule-info:hover,
+  .experience-info:hover,
+  .bio-info:hover {
+    background: rgba(252, 211, 77, 0.2) !important;
+    border: 1px solid rgba(252, 211, 77, 0.6) !important;
+  }
+}
+
+/* 15. Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .schedule-info,
+  .experience-info,
+  .bio-info,
+  .skills-info {
+    animation: none !important;
+  }
+  
+  .skills-info span:hover {
+    transform: none !important;
+  }
+  
+  .schedule-info:hover,
+  .experience-info:hover,
+  .bio-info:hover {
+    transition: none !important;
+  }
+}
+
+/* ===== END ADDITIONAL TEXT HANDLING & STABILITY FIXES ===== */
