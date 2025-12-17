@@ -13,9 +13,18 @@ class MidtransService
     {
         // Set Midtrans configuration
         Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized = config('midtrans.is_sanitized');
-        Config::$is3ds = config('midtrans.is_3ds');
+        Config::$isProduction = config('midtrans.is_production', false);
+        Config::$isSanitized = config('midtrans.is_sanitized', true);
+        Config::$is3ds = config('midtrans.is_3ds', true);
+        
+        // Log configuration for debugging (without exposing sensitive data)
+        \Log::info('Midtrans Configuration:', [
+            'is_production' => Config::$isProduction,
+            'is_sanitized' => Config::$isSanitized,
+            'is_3ds' => Config::$is3ds,
+            'server_key_set' => !empty(Config::$serverKey),
+            'client_key_set' => !empty(config('midtrans.client_key'))
+        ]);
     }
 
     /**
@@ -23,14 +32,25 @@ class MidtransService
      */
     public function createSnapToken(Booking $booking)
     {
+        // Validate booking data
+        if (!$booking->service || !$booking->barber) {
+            throw new \Exception('Booking data tidak lengkap. Service atau Barber tidak ditemukan.');
+        }
+
+        if ($booking->total_price <= 0) {
+            throw new \Exception('Total harga tidak valid.');
+        }
+
+        $orderId = 'BOOKING-' . $booking->id . '-' . time();
+        
         $params = [
             'transaction_details' => [
-                'order_id' => 'BOOKING-' . $booking->id . '-' . time(),
+                'order_id' => $orderId,
                 'gross_amount' => (int) $booking->total_price,
             ],
             'customer_details' => [
                 'first_name' => $booking->customer_name,
-                'email' => $booking->customer_email,
+                'email' => $booking->customer_email ?: 'noemail@sisbar.com',
                 'phone' => $booking->customer_phone,
             ],
             'item_details' => [
@@ -58,11 +78,24 @@ class MidtransService
         ];
 
         try {
+            \Log::info('Creating Midtrans Snap Token for Order ID: ' . $orderId, [
+                'booking_id' => $booking->id,
+                'amount' => $booking->total_price,
+                'customer' => $booking->customer_name
+            ]);
+
             $snapToken = Snap::getSnapToken($params);
+            
+            \Log::info('Midtrans Snap Token created successfully for Order ID: ' . $orderId);
+            
             return $snapToken;
         } catch (\Exception $e) {
-            \Log::error('Midtrans Snap Token Error: ' . $e->getMessage());
-            throw $e;
+            \Log::error('Midtrans Snap Token Error for Order ID: ' . $orderId, [
+                'error' => $e->getMessage(),
+                'booking_id' => $booking->id,
+                'params' => $params
+            ]);
+            throw new \Exception('Gagal membuat token pembayaran: ' . $e->getMessage());
         }
     }
 

@@ -131,6 +131,7 @@ class BookingController extends Controller
                 'total_price' => $service->price,
                 'payment_method' => $request->payment_method,
                 'payment_status' => $paymentStatus,
+                'payment_expires_at' => $request->payment_method === 'online' ? Carbon::now()->addMinutes(5) : null,
                 'status' => $status
             ]);
 
@@ -163,9 +164,10 @@ class BookingController extends Controller
                     'date' => $booking->formatted_date,
                     'time' => $booking->formatted_time,
                     'total_price' => $booking->total_price,
-                    'payment_method' => $booking->payment_method_display,
+                    'payment_method' => $booking->payment_method,
+                    'payment_method_display' => $booking->payment_method_display,
                     'payment_status' => $booking->payment_status_display,
-
+                    'payment_expires_at' => $booking->payment_expires_at ? $booking->payment_expires_at->toISOString() : null,
                     'status' => $booking->status_display,
                     'notes' => $booking->notes,
                     'booking_date' => $booking->booking_date,
@@ -214,8 +216,10 @@ class BookingController extends Controller
                     'booking_date' => $booking->booking_date,
                     'booking_time' => $booking->booking_time,
                     'total_price' => $booking->total_price,
-                    'payment_method' => $booking->payment_method_display,
+                    'payment_method' => $booking->payment_method,
+                    'payment_method_display' => $booking->payment_method_display,
                     'payment_status' => $booking->payment_status_display,
+                    'payment_expires_at' => $booking->payment_expires_at ? $booking->payment_expires_at->toISOString() : null,
                     'status' => $booking->status_display,
                     'status_color' => $booking->status_color,
                     'notes' => $booking->notes,

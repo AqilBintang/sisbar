@@ -20,6 +20,7 @@ class Booking extends Model
         'total_price',
         'payment_method',
         'payment_status',
+        'payment_expires_at',
         'midtrans_order_id',
         'midtrans_transaction_id',
         'snap_token'
@@ -28,7 +29,8 @@ class Booking extends Model
     protected $casts = [
         'booking_date' => 'date',
         'booking_time' => 'string',
-        'total_price' => 'decimal:2'
+        'total_price' => 'decimal:2',
+        'payment_expires_at' => 'datetime'
     ];
 
     public function barber()
