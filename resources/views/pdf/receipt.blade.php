@@ -214,7 +214,7 @@
             </div>
             <div class="company-info">
                 Jl. Raya Barbershop No. 123, Kota Barbershop<br>
-                Telp: +62 812-3456-7890 | Email: info@sisbar.com<br>
+                Telp: +62 815-7279-4699 | Email: info@sisbar.com<br>
                 Website: www.sisbar.com
             </div>
         </div>
@@ -371,7 +371,7 @@
         <div class="footer">
             <p><strong>Terima kasih telah memilih Sisbar Hairstudio!</strong></p>
             <p>Struk ini adalah bukti booking yang sah. Harap simpan untuk keperluan konfirmasi.</p>
-            <p>Untuk pertanyaan, hubungi kami di +62 812-3456-7890</p>
+            <p>Untuk pertanyaan, hubungi kami di +62 815-7279-4699</p>
             <br>
             <p style="font-size: 10px; color: #999;">
                 Dokumen ini digenerate secara otomatis pada {{ date('d F Y, H:i:s') }} WIB

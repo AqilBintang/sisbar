@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600">Jl. Raya Barbershop No. 123</p>
-                    <p class="text-gray-600">Telp: +62 812-3456-7890</p>
+                    <p class="text-gray-600">Telp: +62 815-7279-4699</p>
                 </div>
 
                 <!-- Receipt Details -->
@@ -259,7 +259,7 @@
                     </button>
                     
                     <!-- WhatsApp Contact -->
-                    <a href="https://wa.me/6285729421875" target="_blank"
+                    <a href="https://wa.me/6281572794699" target="_blank"
                        class="group px-6 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg text-center">
                         <div class="flex flex-col items-center">
                             <svg class="w-8 h-8 mb-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -309,7 +309,7 @@
                             </svg>
                         </div>
                         <h4 class="text-white font-semibold">WhatsApp</h4>
-                        <p class="text-gray-300">+62 812-3456-7890</p>
+                        <p class="text-gray-300">+62 815-7279-4699</p>
                     </div>
                     <div class="text-center">
                         <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-3">
