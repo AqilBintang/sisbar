@@ -37,7 +37,7 @@ Route::get('/services', [App\Http\Controllers\ServiceController::class, 'index']
 Route::get('/api/services', [App\Http\Controllers\ServiceController::class, 'getServices']);
 
 Route::get('/barbers', function () {
-    $barbers = App\Models\Barber::with('schedules')->active()->orderBy('level', 'desc')->orderBy('rating', 'desc')->get();
+    $barbers = App\Models\Barber::with('schedules')->active()->where('is_present', true)->orderBy('level', 'desc')->orderBy('rating', 'desc')->get();
     return view('barbershop.barbers', compact('barbers'));
 })->name('barbers');
 

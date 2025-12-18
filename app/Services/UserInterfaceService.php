@@ -43,6 +43,7 @@ class UserInterfaceService
             return Barber::select('id', 'name', 'experience', 'specialty', 'bio', 'photo', 'rating', 'level', 'skills')
                 ->with(['schedules:id,barber_id,day_of_week,start_time,end_time,is_available'])
                 ->active()
+                ->where('is_present', true)
                 ->orderBy('level', 'desc')
                 ->orderBy('rating', 'desc')
                 ->get()
@@ -76,6 +77,7 @@ class UserInterfaceService
     {
         return Cache::remember('ui_barbers_by_level', 600, function () {
             return Barber::where('is_active', true)
+                ->where('is_present', true)
                 ->select('id', 'name', 'experience', 'specialty', 'bio', 'photo', 'rating', 'level', 'skills')
                 ->get()
                 ->groupBy('level');
@@ -101,12 +103,13 @@ class UserInterfaceService
         return Cache::remember('ui_navigation_data', 1800, function () { // Cache for 30 minutes
             return [
                 'services_count' => Service::where('is_active', true)->count(),
-                'barbers_count' => Barber::where('is_active', true)->count(),
+                'barbers_count' => Barber::where('is_active', true)->where('is_present', true)->count(),
                 'service_types' => Service::where('is_active', true)
                     ->distinct()
                     ->pluck('type')
                     ->toArray(),
                 'barber_levels' => Barber::where('is_active', true)
+                    ->where('is_present', true)
                     ->distinct()
                     ->pluck('level')
                     ->toArray(),
