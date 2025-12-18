@@ -100,10 +100,25 @@ class BarbershopApp {
         // Special handling for availability - keep it in SPA, don't create separate route
         if (page === 'availability') {
             this.currentPage = page;
-            this.showPage(page);
-            window.scrollTo(0, 0);
-            // Don't change URL for availability, keep it as SPA-only
-            return;
+            
+            // Ensure availability page exists before showing
+            const availabilityPage = document.querySelector('[data-page="availability"]');
+            if (availabilityPage) {
+                this.showPage(page);
+                window.scrollTo(0, 0);
+                // Don't change URL for availability, keep it as SPA-only
+                return;
+            } else {
+                // If availability page not found, wait and try again
+                setTimeout(() => {
+                    const retryPage = document.querySelector('[data-page="availability"]');
+                    if (retryPage) {
+                        this.showPage(page);
+                        window.scrollTo(0, 0);
+                    }
+                }, 100);
+                return;
+            }
         }
         
         // Load dynamic content for pages that need it
@@ -302,6 +317,12 @@ class BarbershopApp {
             console.error('Page element not found for:', page);
             console.log('Available pages:', Array.from(pages).map(p => p.getAttribute('data-page')));
             
+            // Special handling for availability - don't redirect if element not found
+            if (page === 'availability') {
+                console.log('Availability page element not found, but staying on current page to prevent redirect');
+                return;
+            }
+            
             // Fallback: redirect to appropriate URL if SPA navigation fails
             const pageUrls = {
                 'home': '/',
@@ -322,6 +343,7 @@ class BarbershopApp {
                     (page === 'admin' && currentPath.startsWith('/admin')) ||
                     (page === 'home' && currentPath === '/') ||
                     (page === 'barbers' && currentPath === '/barbers') ||
+                    (page === 'availability' && currentPath === '/') ||
                     (targetUrl.includes('#') && currentPath === '/')) {
                     console.log('Already on target page, skipping redirect');
                     return;
