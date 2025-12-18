@@ -90,28 +90,40 @@
                     <!-- Step 5: Customer Information -->
                     <div id="step-5" class="hidden">
                         <h2 class="text-2xl font-bold text-white mb-6">5. Informasi Pelanggan</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="customer-name" class="block text-sm font-medium text-gray-300 mb-2">Nama Lengkap *</label>
-                                <input type="text" id="customer-name" name="customer_name" required
-                                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
-                                       placeholder="Masukkan nama lengkap"
-                                       value="{{ auth()->user()->name }}">
+                        
+                        <!-- Auto-filled Customer Data Display -->
+                        <div class="bg-slate-700/50 border border-yellow-400/30 rounded-xl p-6 mb-6">
+                            <div class="flex items-center mb-4">
+                                <svg class="w-5 h-5 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h3 class="text-yellow-400 font-semibold">Data Pelanggan Terverifikasi</h3>
                             </div>
-                            <div>
-                                <label for="customer-phone" class="block text-sm font-medium text-gray-300 mb-2">Nomor Telepon *</label>
-                                <input type="tel" id="customer-phone" name="customer_phone" required
-                                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
-                                       placeholder="08xxxxxxxxxx">
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Nama Lengkap</label>
+                                    <input type="text" id="customer-name" name="customer_name" required readonly
+                                           class="w-full px-4 py-3 bg-slate-600 border border-slate-500 rounded-xl text-white cursor-not-allowed"
+                                           value="{{ auth()->user()->name }}">
+                                    <p class="text-gray-400 text-xs mt-1">Data dari akun Anda</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Nomor Telepon</label>
+                                    <input type="tel" id="customer-phone" name="customer_phone" required readonly
+                                           class="w-full px-4 py-3 bg-slate-600 border border-slate-500 rounded-xl text-white cursor-not-allowed"
+                                           value="{{ auth()->user()->whatsapp_number ?? auth()->user()->phone ?? '08xxxxxxxxxx' }}">
+                                    <p class="text-gray-400 text-xs mt-1">Nomor WhatsApp terdaftar</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                                    <input type="email" id="customer-email" name="customer_email" required readonly
+                                           class="w-full px-4 py-3 bg-slate-600 border border-slate-500 rounded-xl text-white cursor-not-allowed"
+                                           value="{{ auth()->user()->email }}">
+                                    <p class="text-gray-400 text-xs mt-1">Email dari akun Google Anda</p>
+                                </div>
                             </div>
-                            <div class="md:col-span-2">
-                                <label for="customer-email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                                <input type="email" id="customer-email" name="customer_email"
-                                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
-                                       placeholder="email@example.com"
-                                       value="{{ auth()->user()->email }}" readonly>
-                                <p class="text-gray-400 text-xs mt-1">Email dari akun Google Anda</p>
-                            </div>
+                        </div>
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-300 mb-3">Metode Pembayaran *</label>
                                 <div class="grid grid-cols-2 gap-4">
@@ -246,6 +258,13 @@ console.log('Pre-selected service:', selectedService);
 
 // Initialize
 document.getElementById('booking-date').min = new Date().toISOString().split('T')[0];
+
+// Auto-populate customer data from authenticated user
+@auth
+bookingData.customer_name = "{{ auth()->user()->name }}";
+bookingData.customer_email = "{{ auth()->user()->email }}";
+bookingData.customer_phone = "{{ auth()->user()->whatsapp_number ?? auth()->user()->phone ?? '' }}";
+@endauth
 
 // Set default payment method visual state
 document.addEventListener('DOMContentLoaded', function() {
@@ -586,19 +605,15 @@ function nextStep() {
 }
 
 function goToConfirmation() {
-    // Validate required fields in step 5
+    // Customer data is pre-filled from authenticated user, no validation needed
     const customerName = document.getElementById('customer-name').value;
     const customerPhone = document.getElementById('customer-phone').value;
+    const customerEmail = document.getElementById('customer-email').value;
     
-    if (!customerName.trim()) {
-        alert('Nama lengkap harus diisi');
-        return;
-    }
-    
-    if (!customerPhone.trim()) {
-        alert('Nomor telepon harus diisi');
-        return;
-    }
+    // Update booking data with current values (already pre-filled)
+    bookingData.customer_name = customerName;
+    bookingData.customer_phone = customerPhone;
+    bookingData.customer_email = customerEmail;
     
     // Go to confirmation step
     showStep(6);
@@ -651,6 +666,11 @@ document.getElementById('booking-form').addEventListener('submit', async functio
     
     // Add selected data
     Object.assign(data, bookingData);
+    
+    // Ensure customer data is included (from pre-filled readonly fields)
+    data.customer_name = document.getElementById('customer-name').value;
+    data.customer_email = document.getElementById('customer-email').value;
+    data.customer_phone = document.getElementById('customer-phone').value;
     
     // Ensure payment method is set correctly
     if (selectedPaymentMethod) {
