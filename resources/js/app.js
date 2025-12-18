@@ -102,6 +102,9 @@ class BarbershopApp {
                 e.preventDefault();
                 e.stopPropagation();
                 
+                // Reset navigation state before processing click
+                this.resetNavigationState();
+                
                 // Prevent double clicks
                 if (navigationLocked) {
                     console.log('Navigation locked, ignoring click');
@@ -169,6 +172,9 @@ class BarbershopApp {
         
         // Special handling for availability - keep it in SPA, don't create separate route
         if (page === 'availability') {
+            // Defensive: Always reset state before showing availability
+            this.resetNavigationState();
+            
             this.currentPage = page;
             this.showPage(page);
             window.scrollTo(0, 0);
@@ -458,6 +464,35 @@ class BarbershopApp {
         // Defensive: Ensure body is never locked
         document.body.style.pointerEvents = '';
         document.body.style.overflow = '';
+    }
+
+    resetNavigationState() {
+        // Reset all navigation state to prevent leaks between menu clicks
+        console.log('Resetting navigation state');
+        
+        // Clear any stuck loading states
+        document.querySelectorAll('[data-navigate]').forEach(el => {
+            el.style.pointerEvents = 'auto';
+            el.style.opacity = '1';
+        });
+        
+        // Ensure body is unlocked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
+        
+        // Clear any active navigation flags
+        document.querySelectorAll('.nav-link.active').forEach(el => {
+            el.classList.remove('active');
+        });
+        
+        // Reset any stuck page transitions
+        document.querySelectorAll('[data-page]').forEach(el => {
+            el.style.transition = '';
+            el.style.opacity = '';
+        });
+        
+        // Defensive: Clear any timeouts that might be pending
+        // (This is safe because we're not tracking timeout IDs)
     }
 
 

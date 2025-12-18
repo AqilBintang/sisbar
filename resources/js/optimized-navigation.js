@@ -74,6 +74,9 @@ class OptimizedBarbershopApp {
         e.preventDefault();
         e.stopPropagation();
         
+        // Reset navigation state before processing click
+        this.resetNavigationState();
+        
         // Prevent double clicks with click-lock
         if (this.navigationLocked) {
             console.log('Navigation locked, ignoring click');
@@ -323,6 +326,38 @@ class OptimizedBarbershopApp {
                 item.classList.remove('active', 'text-accent');
                 item.classList.add('text-gray-600');
             }
+        });
+    }
+
+    resetNavigationState() {
+        // Reset all navigation state to prevent leaks between menu clicks
+        console.log('Resetting optimized navigation state');
+        
+        // Clear loading states map to prevent accumulation
+        this.loadingStates.clear();
+        
+        // Reset navigation lock
+        this.navigationLocked = false;
+        
+        // Clear any stuck loading states
+        document.querySelectorAll('[data-navigate]').forEach(el => {
+            el.style.pointerEvents = 'auto';
+            el.style.opacity = '1';
+        });
+        
+        // Ensure body is unlocked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
+        
+        // Clear any active navigation flags
+        document.querySelectorAll('.nav-link.active').forEach(el => {
+            el.classList.remove('active');
+        });
+        
+        // Reset any stuck page transitions
+        document.querySelectorAll('[data-page]').forEach(el => {
+            el.style.transition = '';
+            el.style.opacity = '';
         });
     }
 
