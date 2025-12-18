@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <p class="text-gray-600">Jl. Raya Barbershop No. 123</p>
-                <p class="text-gray-600">Telp: +62 812-3456-7890</p>
+                <p class="text-gray-600">Telp: +62 815-7279-4699</p>
             </div>
 
             <!-- Receipt Details -->

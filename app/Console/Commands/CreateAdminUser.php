@@ -20,7 +20,7 @@ class CreateAdminUser extends Command
                 'email' => 'admin@sisbar.com',
                 'password' => bcrypt('admin123'),
                 'role' => 'admin',
-                'whatsapp_number' => '+6285729421875',
+                'whatsapp_number' => '+6281572794699',
                 'whatsapp_verified' => true,
                 'allow_broadcast' => false
             ]);
