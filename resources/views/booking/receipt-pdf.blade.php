@@ -343,7 +343,7 @@
                 <h1>Sisbar Hairstudio</h1>
                 <p>Professional Barbershop</p>
                 <p>Jl. Raya Barbershop No. 123</p>
-                <p>Telp: +62 812-3456-7890</p>
+                <p>Telp: +62 815-7279-4699</p>
             </div>
         </div>
 

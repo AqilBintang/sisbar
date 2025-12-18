@@ -161,7 +161,7 @@ class BroadcastService
                     // Check if using Twilio and if this might be a sandbox limitation
                     if (get_class($this->whatsappService) === 'App\Services\WhatsAppService') {
                         // Twilio sandbox - only company number actually receives messages
-                        if ($recipient->whatsapp_number === '+6285729421875' || $recipient->whatsapp_number === '6285729421875') {
+                        if ($recipient->whatsapp_number === '+6281572794699' || $recipient->whatsapp_number === '6281572794699') {
                             $recipient->update([
                                 'status' => 'sent',
                                 'sent_at' => now()
@@ -266,7 +266,7 @@ class BroadcastService
                 'email' => 'admin@sisbar.com',
                 'password' => bcrypt('admin123'),
                 'role' => 'admin',
-                'whatsapp_number' => '+6285729421875',
+                'whatsapp_number' => '+6281572794699',
                 'whatsapp_verified' => true,
                 'allow_broadcast' => false // Admin tidak perlu menerima broadcast
             ]);

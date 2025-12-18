@@ -64,7 +64,7 @@
                             </svg>
                         </div>
                         <h4 class="text-white font-semibold">Telepon</h4>
-                        <p class="text-gray-300">+62 812-3456-7890</p>
+                        <p class="text-gray-300">+62 815-7279-4699</p>
                     </div>
                     <div class="text-center">
                         <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-3">

@@ -97,6 +97,9 @@
 
     <!-- Footer -->
     @include('components.footer')
+    
+    <!-- Floating WhatsApp Widget -->
+    @include('components.whatsapp-float')
 
     @stack('scripts')
 </body>
