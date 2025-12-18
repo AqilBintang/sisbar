@@ -179,7 +179,7 @@ Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->
 // Profile routes (protected by authentication)
 Route::middleware('auth.user')->prefix('profile')->name('profile.')->group(function () {
     Route::get('/whatsapp-setup', [App\Http\Controllers\ProfileController::class, 'showWhatsAppSetup'])->name('whatsapp.setup');
-    Route::post('/whatsapp-setup', [App\Http\Controllers\ProfileController::class, 'setupWhatsApp'])->name('whatsapp.setup');
+    Route::post('/whatsapp-setup', [App\Http\Controllers\ProfileController::class, 'setupWhatsApp'])->name('whatsapp.store');
 });
 
 // WhatsApp routes (protected by authentication)
