@@ -12,8 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Update enum to include sandbox_limited status
-        DB::statement("ALTER TABLE broadcast_recipients MODIFY COLUMN status ENUM('pending', 'sent', 'failed', 'delivered', 'sandbox_limited') DEFAULT 'pending'");
+        // SQLite doesn't support MODIFY COLUMN, so we'll skip this for SQLite
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE broadcast_recipients MODIFY COLUMN status ENUM('pending', 'sent', 'failed', 'delivered', 'sandbox_limited') DEFAULT 'pending'");
+        }
     }
 
     /**
@@ -21,7 +23,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert back to original enum
-        DB::statement("ALTER TABLE broadcast_recipients MODIFY COLUMN status ENUM('pending', 'sent', 'failed', 'delivered') DEFAULT 'pending'");
+        // SQLite doesn't support MODIFY COLUMN, so we'll skip this for SQLite
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE broadcast_recipients MODIFY COLUMN status ENUM('pending', 'sent', 'failed', 'delivered') DEFAULT 'pending'");
+        }
     }
 };

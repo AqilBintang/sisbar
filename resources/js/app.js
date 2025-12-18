@@ -1,6 +1,59 @@
 import './bootstrap';
 
+// ============================================
+// DEFENSIVE SAFEGUARDS: Prevent UI Freeze
+// ============================================
+
+// Global error handler to prevent UI lock on uncaught errors
+window.addEventListener('error', function(event) {
+    console.error('Uncaught error detected:', event.error);
+    // Ensure UI remains clickable even if error occurs
+    unlockUI();
+});
+
+// Global promise rejection handler
+window.addEventListener('unhandledrejection', function(event) {
+    console.error('Unhandled promise rejection:', event.reason);
+    // Ensure UI remains clickable
+    unlockUI();
+});
+
+// Emergency UI unlock function
+function unlockUI() {
+    // Remove any stuck loading states
+    document.body.style.pointerEvents = '';
+    document.body.style.overflow = '';
+    
+    // Remove any stuck overlays or backdrops
+    const overlays = document.querySelectorAll('.loading-overlay, .backdrop, [style*="pointer-events: none"]');
+    overlays.forEach(overlay => {
+        if (overlay !== document.body) {
+            overlay.remove();
+        }
+    });
+    
+    // Re-enable all navigation items
+    document.querySelectorAll('[data-navigate]').forEach(el => {
+        el.style.pointerEvents = 'auto';
+        el.style.opacity = '1';
+    });
+    
+    console.log('UI unlocked via emergency safeguard');
+}
+
+// Ensure UI is unlocked on page load
+window.addEventListener('load', function() {
+    unlockUI();
+});
+
+// Ensure UI is unlocked on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+    unlockUI();
+});
+
+// ============================================
 // Barbershop App Navigation System
+// ============================================
 class BarbershopApp {
     constructor() {
         // Don't initialize navigation on admin or barber pages
@@ -41,12 +94,34 @@ class BarbershopApp {
     }
 
     setupNavigation() {
-        // Setup main navigation
+        // Setup main navigation with click-lock to prevent double execution
+        let navigationLocked = false;
+        
         document.addEventListener('click', (e) => {
-            if (e.target.matches('[data-navigate]')) {
+            // Handle both buttons and links with data-navigate
+            const navElement = e.target.closest('[data-navigate]');
+            if (navElement) {
                 e.preventDefault();
-                const page = e.target.getAttribute('data-navigate');
-                this.navigateTo(page);
+                e.stopPropagation();
+                
+                // Reset navigation state before processing click
+                this.resetNavigationState();
+                
+                // Prevent double clicks
+                if (navigationLocked) {
+                    console.log('Navigation locked, ignoring click');
+                    return;
+                }
+                
+                navigationLocked = true;
+                const page = navElement.getAttribute('data-navigate');
+                
+                // Unlock after navigation attempt
+                setTimeout(() => {
+                    navigationLocked = false;
+                }, 500);
+                
+                this.dispatchNavigation(page);
             }
         });
 
@@ -99,6 +174,9 @@ class BarbershopApp {
         
         // Special handling for availability - keep it in SPA, don't create separate route
         if (page === 'availability') {
+            // Defensive: Always reset state before showing availability
+            this.resetNavigationState();
+            
             this.currentPage = page;
             this.showPage(page);
             window.scrollTo(0, 0);
@@ -124,6 +202,12 @@ class BarbershopApp {
     selectService(serviceId) {
         this.selectedService = serviceId;
         console.log('Selected service:', serviceId);
+        
+        // Store selected service in session storage
+        sessionStorage.setItem('selectedService', serviceId);
+        
+        // Redirect directly to booking page with service pre-selected
+        window.location.href = `/booking?service=${serviceId}`;
     }
 
     selectBarber(barberId) {
@@ -262,6 +346,12 @@ class BarbershopApp {
                 </div>
             `;
         }
+        
+        // Defensive: Auto-unlock after 10 seconds to prevent permanent freeze
+        setTimeout(() => {
+            this.hideLoadingState(page);
+            console.warn(`Auto-unlocked loading state for ${page} after timeout`);
+        }, 10000);
     }
 
     hideLoadingState(page) {
@@ -270,6 +360,10 @@ class BarbershopApp {
             navItem.style.opacity = '1';
             navItem.style.pointerEvents = 'auto';
         }
+        
+        // Defensive: Ensure body is never locked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
     }
 
     showPage(page) {
@@ -296,6 +390,24 @@ class BarbershopApp {
             console.error('Page element not found for:', page);
             console.log('Available pages:', Array.from(pages).map(p => p.getAttribute('data-page')));
             
+            // Special handling for availability - try to create or find the element
+            if (page === 'availability') {
+                console.log('Availability page element not found, attempting to create or wait for it');
+                // Try to find it in a different layout or wait for DOM to be ready
+                setTimeout(() => {
+                    const retryPageEl = document.querySelector(`[data-page="${page}"]`);
+                    if (retryPageEl) {
+                        retryPageEl.style.display = 'block';
+                        console.log('Successfully showed availability page on retry');
+                        this.enableNavigation();
+                        this.updateNavbarActiveState(page);
+                    } else {
+                        console.warn('Availability page element still not found after retry');
+                    }
+                }, 50);
+                return;
+            }
+            
             // Fallback: redirect to appropriate URL if SPA navigation fails
             const pageUrls = {
                 'home': '/',
@@ -316,6 +428,7 @@ class BarbershopApp {
                     (page === 'admin' && currentPath.startsWith('/admin')) ||
                     (page === 'home' && currentPath === '/') ||
                     (page === 'barbers' && currentPath === '/barbers') ||
+                    (page === 'availability' && currentPath === '/') ||
                     (targetUrl.includes('#') && currentPath === '/')) {
                     console.log('Already on target page, skipping redirect');
                     return;
@@ -349,6 +462,56 @@ class BarbershopApp {
             el.style.pointerEvents = 'auto';
             el.style.opacity = '1';
         });
+        
+        // Defensive: Ensure body is never locked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
+    }
+
+    resetNavigationState() {
+        // Reset all navigation state to prevent leaks between menu clicks
+        console.log('Resetting navigation state');
+        
+        // Clear any stuck loading states
+        document.querySelectorAll('[data-navigate]').forEach(el => {
+            el.style.pointerEvents = 'auto';
+            el.style.opacity = '1';
+        });
+        
+        // Ensure body is unlocked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
+        
+        // Clear any active navigation flags
+        document.querySelectorAll('.nav-link.active').forEach(el => {
+            el.classList.remove('active');
+        });
+        
+        // Reset any stuck page transitions
+        document.querySelectorAll('[data-page]').forEach(el => {
+            el.style.transition = '';
+            el.style.opacity = '';
+        });
+        
+        // Defensive: Clear any timeouts that might be pending
+        // (This is safe because we're not tracking timeout IDs)
+    }
+
+    // Global navigation dispatcher - single entry point for all navigation
+    dispatchNavigation(page) {
+        console.log(`Dispatching unified navigation to: ${page}`);
+        
+        // Always reset state first
+        this.resetNavigationState();
+        
+        // Prevent navigation to same page
+        if (this.currentPage === page) {
+            console.log(`Already on ${page}, ignoring navigation`);
+            return;
+        }
+        
+        // Dispatch to appropriate handler
+        this.navigateTo(page);
     }
 
 
@@ -421,8 +584,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    if (!window.barbershopApp) {
+    // Prevent double initialization - only initialize if no navigation system exists
+    if (!window.barbershopApp && !window.navigationInitialized) {
+        window.navigationInitialized = true;
         window.barbershopApp = new BarbershopApp();
+        console.log('BarbershopApp initialized');
         
         // If we're on barbers page after refresh, ensure navigation works
         if (window.location.pathname === '/barbers') {

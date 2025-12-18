@@ -24,6 +24,9 @@ class OptimizedBarbershopApp {
     }
 
     setupOptimizedNavigation() {
+        // Initialize click-lock to prevent double execution
+        this.navigationLocked = false;
+        
         // Use event delegation for better performance
         document.addEventListener('click', this.handleNavigation.bind(this), { passive: false });
         
@@ -50,19 +53,50 @@ class OptimizedBarbershopApp {
         }
     }
 
+    selectService(serviceId) {
+        // Store selected service in session storage
+        sessionStorage.setItem('selectedService', serviceId);
+        
+        // Redirect directly to booking page with service pre-selected
+        window.location.href = `/booking?service=${serviceId}`;
+    }
+
+    selectBarber(barberId) {
+        // Store selected barber
+        sessionStorage.setItem('selectedBarber', barberId);
+        console.log('Selected barber:', barberId);
+    }
+
     handleNavigation(e) {
         const navElement = e.target.closest('[data-navigate]');
         if (!navElement) return;
 
         e.preventDefault();
+        e.stopPropagation();
+        
+        // Reset navigation state before processing click
+        this.resetNavigationState();
+        
+        // Prevent double clicks with click-lock
+        if (this.navigationLocked) {
+            console.log('Navigation locked, ignoring click');
+            return;
+        }
+        
+        this.navigationLocked = true;
         const page = navElement.getAttribute('data-navigate');
+        
+        // Unlock after navigation attempt
+        setTimeout(() => {
+            this.navigationLocked = false;
+        }, 500);
         
         // Add loading state immediately for better UX
         this.showLoadingState(page);
         
         // Use requestAnimationFrame for smooth transitions
         requestAnimationFrame(() => {
-            this.navigateTo(page);
+            this.dispatchNavigation(page);
         });
     }
 
@@ -80,6 +114,12 @@ class OptimizedBarbershopApp {
             navItem.style.opacity = '0.7';
             navItem.style.pointerEvents = 'none';
         }
+        
+        // Defensive: Auto-unlock after 10 seconds to prevent permanent freeze
+        setTimeout(() => {
+            this.hideLoadingState(page);
+            console.warn(`Auto-unlocked loading state for ${page} after timeout`);
+        }, 10000);
     }
 
     hideLoadingState(page) {
@@ -88,6 +128,10 @@ class OptimizedBarbershopApp {
             navItem.style.opacity = '1';
             navItem.style.pointerEvents = 'auto';
         }
+        
+        // Defensive: Ensure body is never locked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
     }
 
     async navigateTo(page) {
@@ -285,6 +329,55 @@ class OptimizedBarbershopApp {
         });
     }
 
+    resetNavigationState() {
+        // Reset all navigation state to prevent leaks between menu clicks
+        console.log('Resetting optimized navigation state');
+        
+        // Clear loading states map to prevent accumulation
+        this.loadingStates.clear();
+        
+        // Reset navigation lock
+        this.navigationLocked = false;
+        
+        // Clear any stuck loading states
+        document.querySelectorAll('[data-navigate]').forEach(el => {
+            el.style.pointerEvents = 'auto';
+            el.style.opacity = '1';
+        });
+        
+        // Ensure body is unlocked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
+        
+        // Clear any active navigation flags
+        document.querySelectorAll('.nav-link.active').forEach(el => {
+            el.classList.remove('active');
+        });
+        
+        // Reset any stuck page transitions
+        document.querySelectorAll('[data-page]').forEach(el => {
+            el.style.transition = '';
+            el.style.opacity = '';
+        });
+    }
+
+    // Global navigation dispatcher - single entry point for all navigation
+    dispatchNavigation(page) {
+        console.log(`Dispatching optimized navigation to: ${page}`);
+        
+        // Always reset state first
+        this.resetNavigationState();
+        
+        // Prevent navigation to same page
+        if (this.currentPage === page) {
+            console.log(`Already on ${page}, ignoring navigation`);
+            return;
+        }
+        
+        // Dispatch to appropriate handler
+        this.navigateTo(page);
+    }
+
     // Cleanup method
     destroy() {
         this.cache.clear();
@@ -300,12 +393,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    // Replace the old app with optimized version
-    if (window.barbershopApp) {
-        window.barbershopApp.destroy?.();
+    // Prevent double initialization - only initialize if no navigation system exists
+    if (!window.navigationInitialized) {
+        window.navigationInitialized = true;
+        
+        // Replace the old app with optimized version
+        if (window.barbershopApp) {
+            window.barbershopApp.destroy?.();
+        }
+        
+        window.barbershopApp = new OptimizedBarbershopApp();
+        console.log('OptimizedBarbershopApp initialized');
+    } else {
+        console.log('Navigation already initialized, skipping OptimizedBarbershopApp');
     }
-    
-    window.barbershopApp = new OptimizedBarbershopApp();
 });
 
 // Handle browser back/forward buttons
