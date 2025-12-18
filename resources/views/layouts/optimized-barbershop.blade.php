@@ -120,6 +120,9 @@
         @yield('content')
     </main>
 
+    <!-- Footer -->
+    @include('components.footer')
+
     <!-- Scripts loaded at the end for better performance -->
     @vite(['resources/js/app.js'])
     <script src="{{ asset('js/fixed-navigation.js') }}" defer></script>
