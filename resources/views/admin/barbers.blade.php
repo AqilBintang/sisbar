@@ -195,8 +195,14 @@
                                     </svg>
                                 </div>
                             @endif
-                            <div>
-                                <h4 class="text-lg font-medium text-gray-900">{{ $barber->name }}</h4>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-medium text-gray-900">{{ $barber->name }}</h4>
+                                    <!-- Status Badge -->
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full {{ $barber->is_present ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $barber->is_present ? 'HADIR' : 'TIDAK HADIR' }}
+                                    </span>
+                                </div>
                                 <div class="flex items-center">
                                     <p class="text-sm text-gray-500 mr-2">{{ ucfirst($barber->level) }}</p>
                                     <div class="flex items-center">
@@ -229,13 +235,21 @@
                             @endif
                         </div>
                         
-                        <div class="flex space-x-2">
+                        <div class="grid grid-cols-3 gap-2">
                             <a href="{{ route('admin.barbers.edit', $barber->id) }}" 
-                               class="flex-1 bg-yellow-100 text-yellow-800 text-xs font-medium px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors text-center">
+                               class="bg-yellow-100 text-yellow-800 text-xs font-medium px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors text-center">
                                 Edit
                             </a>
+                            <form method="POST" action="{{ route('admin.barbers.toggle-presence', $barber->id) }}" 
+                                  class="inline" onsubmit="return confirm('Yakin ingin mengubah status kehadiran {{ $barber->name }}?')">
+                                @csrf
+                                <button type="submit" 
+                                        class="w-full {{ $barber->is_present ? 'bg-orange-100 text-orange-800 hover:bg-orange-200' : 'bg-green-100 text-green-800 hover:bg-green-200' }} text-xs font-medium px-3 py-1 rounded-full transition-colors">
+                                    Status Karyawan
+                                </button>
+                            </form>
                             <form method="POST" action="{{ route('admin.barbers.destroy', $barber->id) }}" 
-                                  class="flex-1" onsubmit="return confirm('Yakin ingin menghapus kapster ini?')">
+                                  class="inline" onsubmit="return confirm('Yakin ingin menghapus kapster ini?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 

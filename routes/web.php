@@ -70,6 +70,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/barbers/{id}/edit', [App\Http\Controllers\AdminController::class, 'editBarber'])->name('admin.barbers.edit');
         Route::put('/barbers/{id}', [App\Http\Controllers\AdminController::class, 'updateBarber'])->name('admin.barbers.update');
         Route::delete('/barbers/{id}', [App\Http\Controllers\AdminController::class, 'destroyBarber'])->name('admin.barbers.destroy');
+        Route::post('/barbers/{id}/toggle-presence', [App\Http\Controllers\AdminController::class, 'toggleBarberPresence'])->name('admin.barbers.toggle-presence');
         Route::get('/bookings', [App\Http\Controllers\AdminController::class, 'bookings'])->name('admin.bookings');
         Route::get('/bookings/{id}/receipt', function($id) {
             $booking = App\Models\Booking::with(['barber', 'service'])->findOrFail($id);

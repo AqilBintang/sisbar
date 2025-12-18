@@ -453,6 +453,21 @@ class AdminController extends Controller
         }
     }
 
+    public function toggleBarberPresence($id)
+    {
+        try {
+            $barber = Barber::findOrFail($id);
+            $barber->is_present = !$barber->is_present;
+            $barber->save();
+
+            $status = $barber->is_present ? 'HADIR' : 'TIDAK HADIR';
+            
+            return redirect()->route('admin.barbers')->with('success', "Status kehadiran {$barber->name} berhasil diubah menjadi {$status}!");
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Gagal mengubah status kehadiran: ' . $e->getMessage()]);
+        }
+    }
+
     // Booking Management
     public function bookings(Request $request)
     {

@@ -77,6 +77,8 @@ class BarberSchedule extends Model
         return Barber::whereHas('schedules', function($query) use ($dayOfWeek) {
             $query->where('day_of_week', $dayOfWeek)
                   ->where('is_available', true);
-        })->where('is_active', true)->get();
+        })->where('is_active', true)
+          ->where('is_present', true)
+          ->get();
     }
 }
