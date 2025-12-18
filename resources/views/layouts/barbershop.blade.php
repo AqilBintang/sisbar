@@ -95,6 +95,9 @@
         @yield('content')
     </main>
 
+    <!-- Footer -->
+    @include('components.footer')
+    
     <!-- Floating WhatsApp Widget -->
     @include('components.whatsapp-float')
 
