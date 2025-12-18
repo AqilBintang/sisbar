@@ -499,6 +499,9 @@
         </div>
     </main>
 
+    <!-- Footer -->
+    @include('components.footer')
+
     <!-- JavaScript -->
     <script>
         function showPage(pageId) {

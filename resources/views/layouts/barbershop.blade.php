@@ -95,6 +95,9 @@
         @yield('content')
     </main>
 
+    <!-- Footer -->
+    @include('components.footer')
+
     @stack('scripts')
 </body>
 </html>
