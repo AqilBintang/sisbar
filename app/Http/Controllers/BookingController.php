@@ -14,9 +14,17 @@ use Carbon\Carbon;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('booking.index');
+        $selectedService = null;
+        
+        // Check if service is pre-selected via URL parameter
+        if ($request->has('service')) {
+            $serviceId = $request->get('service');
+            $selectedService = \App\Models\Service::find($serviceId);
+        }
+        
+        return view('booking.index', compact('selectedService'));
     }
 
     public function getAvailableBarbers(Request $request)

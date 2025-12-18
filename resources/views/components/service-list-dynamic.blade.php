@@ -221,10 +221,7 @@
                                 @elseif($service->type === 'premium') bg-purple-500 text-white hover:bg-purple-600 hover:shadow-lg hover:shadow-purple-500/25 active:scale-95 active:bg-purple-700
                                 @elseif($service->type === 'populer') bg-accent text-black hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/25 active:scale-95 active:bg-accent/80
                                 @else bg-accent/10 border border-accent/30 text-accent hover:bg-accent hover:text-black hover:border-accent/60 hover:shadow-lg hover:shadow-accent/20 active:scale-95 active:bg-accent/90 @endif">
-                                @if($service->type === 'ekonomis') Pilih Ekonomis
-                                @elseif($service->type === 'paket') Pilih Paket
-                                @elseif($service->type === 'premium') Pilih Premium
-                                @else Pilih Layanan @endif
+                                Book Now
                             </button>
                             
                             <!-- Bottom Decorative Line -->

@@ -117,7 +117,7 @@
                             
                             <!-- Button -->
                             <button data-select-service="basic-haircut" data-navigate="barbers" class="w-full bg-accent/10 border border-accent/30 text-accent py-3 rounded-lg font-semibold hover:bg-accent hover:text-black hover:border-accent/60 hover:shadow-lg hover:shadow-accent/20 active:scale-95 active:bg-accent/90 transition-all duration-300 cursor-pointer">
-                                Pilih Layanan
+                                Book Now
                             </button>
                             
                             <!-- Bottom Decorative Line -->
@@ -297,7 +297,7 @@
                             
                             <!-- Button -->
                             <button data-select-service="beard-trim" data-navigate="barbers" class="w-full bg-accent/10 border border-accent/30 text-accent py-3 rounded-lg font-semibold hover:bg-accent hover:text-black hover:border-accent/60 hover:shadow-lg hover:shadow-accent/20 active:scale-95 active:bg-accent/90 transition-all duration-300 cursor-pointer">
-                                Pilih Layanan
+                                Book Now
                             </button>
                             
                             <!-- Bottom Decorative Line -->
@@ -458,7 +458,7 @@
                             
                             <!-- Button -->
                             <button data-select-service="hair-wash" data-navigate="barbers" class="w-full bg-accent/10 border border-accent/30 text-accent py-3 rounded-lg font-semibold hover:bg-accent hover:text-black hover:border-accent/60 hover:shadow-lg hover:shadow-accent/20 active:scale-95 active:bg-accent/90 transition-all duration-300 cursor-pointer">
-                                Pilih Layanan
+                                Book Now
                             </button>
                             
                             <!-- Bottom Decorative Line -->
@@ -545,7 +545,7 @@
                             
                             <!-- Button -->
                             <button data-select-service="kids-haircut" data-navigate="barbers" class="w-full bg-accent/10 border border-accent/30 text-accent py-3 rounded-lg font-semibold hover:bg-accent hover:text-black hover:border-accent/60 hover:shadow-lg hover:shadow-accent/20 active:scale-95 active:bg-accent/90 transition-all duration-300 cursor-pointer">
-                                Pilih Layanan
+                                Book Now
                             </button>
                             
                             <!-- Bottom Decorative Line -->

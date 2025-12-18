@@ -62,12 +62,30 @@
                     </div>
 
                     <!-- Step 4: Service Selection -->
-                    <div id="step-4" class="hidden">
+                    <div id="step-4" class="hidden" @if(isset($selectedService) && $selectedService) style="display: none !important;" @endif>
                         <h2 class="text-2xl font-bold text-white mb-6">4. Pilih Layanan</h2>
                         <div id="services-list" class="space-y-3 mb-6">
                             <!-- Services will be populated here -->
                         </div>
                     </div>
+                    
+                    @if(isset($selectedService) && $selectedService)
+                    <!-- Pre-selected Service Display -->
+                    <div id="preselected-service" class="mb-6">
+                        <h2 class="text-2xl font-bold text-white mb-4">Layanan Terpilih</h2>
+                        <div class="bg-slate-700 border-2 border-yellow-400 rounded-xl p-6">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="text-white font-semibold text-lg">{{ $selectedService->name }}</h4>
+                                    <p class="text-gray-400 text-sm">{{ $selectedService->duration }} menit</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-yellow-400 font-bold text-xl">{{ $selectedService->formatted_price }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
 
                     <!-- Step 5: Customer Information -->
                     <div id="step-5" class="hidden">
@@ -211,6 +229,20 @@ let selectedPaymentMethod = 'cash'; // Default to cash
 let bookingData = {
     payment_method: 'cash' // Set default payment method
 };
+
+// Check for pre-selected service
+@if(isset($selectedService) && $selectedService)
+selectedService = {
+    id: {{ $selectedService->id }},
+    name: "{{ $selectedService->name }}",
+    price: {{ $selectedService->price }},
+    duration: {{ $selectedService->duration }},
+    formatted_price: "{{ $selectedService->formatted_price }}"
+};
+bookingData.service_id = {{ $selectedService->id }};
+bookingData.total_price = {{ $selectedService->price }};
+console.log('Pre-selected service:', selectedService);
+@endif
 
 // Initialize
 document.getElementById('booking-date').min = new Date().toISOString().split('T')[0];
@@ -379,9 +411,15 @@ function selectTime(timeSlot) {
     });
     event.currentTarget.classList.add('border-yellow-400', 'bg-slate-600');
     
-    // Load services
+    // Check if service is already pre-selected
+    @if(isset($selectedService) && $selectedService)
+    // Skip service selection, go directly to customer info
+    showStep(5);
+    @else
+    // Load services for selection
     loadServices();
     showStep(4);
+    @endif
 }
 
 async function loadServices() {

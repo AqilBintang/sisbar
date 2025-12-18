@@ -50,6 +50,20 @@ class OptimizedBarbershopApp {
         }
     }
 
+    selectService(serviceId) {
+        // Store selected service in session storage
+        sessionStorage.setItem('selectedService', serviceId);
+        
+        // Redirect directly to booking page with service pre-selected
+        window.location.href = `/booking?service=${serviceId}`;
+    }
+
+    selectBarber(barberId) {
+        // Store selected barber
+        sessionStorage.setItem('selectedBarber', barberId);
+        console.log('Selected barber:', barberId);
+    }
+
     handleNavigation(e) {
         const navElement = e.target.closest('[data-navigate]');
         if (!navElement) return;

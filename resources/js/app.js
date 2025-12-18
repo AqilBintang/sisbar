@@ -124,6 +124,12 @@ class BarbershopApp {
     selectService(serviceId) {
         this.selectedService = serviceId;
         console.log('Selected service:', serviceId);
+        
+        // Store selected service in session storage
+        sessionStorage.setItem('selectedService', serviceId);
+        
+        // Redirect directly to booking page with service pre-selected
+        window.location.href = `/booking?service=${serviceId}`;
     }
 
     selectBarber(barberId) {
