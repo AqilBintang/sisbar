@@ -98,7 +98,9 @@ class BarbershopApp {
         let navigationLocked = false;
         
         document.addEventListener('click', (e) => {
-            if (e.target.matches('[data-navigate]')) {
+            // Handle both buttons and links with data-navigate
+            const navElement = e.target.closest('[data-navigate]');
+            if (navElement) {
                 e.preventDefault();
                 e.stopPropagation();
                 
@@ -112,14 +114,14 @@ class BarbershopApp {
                 }
                 
                 navigationLocked = true;
-                const page = e.target.getAttribute('data-navigate');
+                const page = navElement.getAttribute('data-navigate');
                 
                 // Unlock after navigation attempt
                 setTimeout(() => {
                     navigationLocked = false;
                 }, 500);
                 
-                this.navigateTo(page);
+                this.dispatchNavigation(page);
             }
         });
 
@@ -493,6 +495,23 @@ class BarbershopApp {
         
         // Defensive: Clear any timeouts that might be pending
         // (This is safe because we're not tracking timeout IDs)
+    }
+
+    // Global navigation dispatcher - single entry point for all navigation
+    dispatchNavigation(page) {
+        console.log(`Dispatching unified navigation to: ${page}`);
+        
+        // Always reset state first
+        this.resetNavigationState();
+        
+        // Prevent navigation to same page
+        if (this.currentPage === page) {
+            console.log(`Already on ${page}, ignoring navigation`);
+            return;
+        }
+        
+        // Dispatch to appropriate handler
+        this.navigateTo(page);
     }
 
 

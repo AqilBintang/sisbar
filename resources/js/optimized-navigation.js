@@ -96,7 +96,7 @@ class OptimizedBarbershopApp {
         
         // Use requestAnimationFrame for smooth transitions
         requestAnimationFrame(() => {
-            this.navigateTo(page);
+            this.dispatchNavigation(page);
         });
     }
 
@@ -359,6 +359,23 @@ class OptimizedBarbershopApp {
             el.style.transition = '';
             el.style.opacity = '';
         });
+    }
+
+    // Global navigation dispatcher - single entry point for all navigation
+    dispatchNavigation(page) {
+        console.log(`Dispatching optimized navigation to: ${page}`);
+        
+        // Always reset state first
+        this.resetNavigationState();
+        
+        // Prevent navigation to same page
+        if (this.currentPage === page) {
+            console.log(`Already on ${page}, ignoring navigation`);
+            return;
+        }
+        
+        // Dispatch to appropriate handler
+        this.navigateTo(page);
     }
 
     // Cleanup method

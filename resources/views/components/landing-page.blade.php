@@ -379,10 +379,10 @@
             <div>
                 <h3 class="text-base font-bold mb-4">Navigasi</h3>
                 <ul class="space-y-2">
-                    <li><a href="#" data-navigate="home" class="text-gray-400 hover:text-accent transition-colors text-sm">Home</a></li>
-                    <li><a href="#" data-navigate="services" class="text-gray-400 hover:text-accent transition-colors text-sm">Layanan</a></li>
-                    <li><a href="#" data-navigate="barbers" class="text-gray-400 hover:text-accent transition-colors text-sm">Kapster</a></li>
-                    <li><a href="#" data-navigate="booking" class="text-gray-400 hover:text-accent transition-colors text-sm">Booking</a></li>
+                    <li><a href="javascript:void(0)" data-navigate="home" class="text-gray-400 hover:text-accent transition-colors text-sm">Home</a></li>
+                    <li><a href="javascript:void(0)" data-navigate="services" class="text-gray-400 hover:text-accent transition-colors text-sm">Layanan</a></li>
+                    <li><a href="javascript:void(0)" data-navigate="barbers" class="text-gray-400 hover:text-accent transition-colors text-sm">Kapster</a></li>
+                    <li><a href="javascript:void(0)" data-navigate="booking" class="text-gray-400 hover:text-accent transition-colors text-sm">Booking</a></li>
                 </ul>
             </div>
 

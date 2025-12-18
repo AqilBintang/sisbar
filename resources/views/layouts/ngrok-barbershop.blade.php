@@ -270,11 +270,11 @@
             </a>
             
             <ul class="navbar-nav">
-                <li><a href="#" class="nav-link" onclick="showPage('home')">Home</a></li>
-                <li><a href="#" class="nav-link" onclick="showPage('services')">Layanan</a></li>
-                <li><a href="#" class="nav-link" onclick="showPage('barbers')">Kapster</a></li>
-                <li><a href="#" class="nav-link" onclick="showPage('booking')">Booking</a></li>
-                <li><a href="#" class="nav-link" onclick="showPage('availability')">Cek Ketersediaan</a></li>
+                <li><a href="javascript:void(0)" data-navigate="home" class="nav-link">Home</a></li>
+                <li><a href="javascript:void(0)" data-navigate="services" class="nav-link">Layanan</a></li>
+                <li><a href="javascript:void(0)" data-navigate="barbers" class="nav-link">Kapster</a></li>
+                <li><a href="javascript:void(0)" data-navigate="booking" class="nav-link">Booking</a></li>
+                <li><a href="javascript:void(0)" data-navigate="availability" class="nav-link">Cek Ketersediaan</a></li>
             </ul>
             
             <div class="navbar-buttons">
