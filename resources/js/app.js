@@ -1,6 +1,59 @@
 import './bootstrap';
 
+// ============================================
+// DEFENSIVE SAFEGUARDS: Prevent UI Freeze
+// ============================================
+
+// Global error handler to prevent UI lock on uncaught errors
+window.addEventListener('error', function(event) {
+    console.error('Uncaught error detected:', event.error);
+    // Ensure UI remains clickable even if error occurs
+    unlockUI();
+});
+
+// Global promise rejection handler
+window.addEventListener('unhandledrejection', function(event) {
+    console.error('Unhandled promise rejection:', event.reason);
+    // Ensure UI remains clickable
+    unlockUI();
+});
+
+// Emergency UI unlock function
+function unlockUI() {
+    // Remove any stuck loading states
+    document.body.style.pointerEvents = '';
+    document.body.style.overflow = '';
+    
+    // Remove any stuck overlays or backdrops
+    const overlays = document.querySelectorAll('.loading-overlay, .backdrop, [style*="pointer-events: none"]');
+    overlays.forEach(overlay => {
+        if (overlay !== document.body) {
+            overlay.remove();
+        }
+    });
+    
+    // Re-enable all navigation items
+    document.querySelectorAll('[data-navigate]').forEach(el => {
+        el.style.pointerEvents = 'auto';
+        el.style.opacity = '1';
+    });
+    
+    console.log('UI unlocked via emergency safeguard');
+}
+
+// Ensure UI is unlocked on page load
+window.addEventListener('load', function() {
+    unlockUI();
+});
+
+// Ensure UI is unlocked on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+    unlockUI();
+});
+
+// ============================================
 // Barbershop App Navigation System
+// ============================================
 class BarbershopApp {
     constructor() {
         // Don't initialize navigation on admin or barber pages
@@ -268,6 +321,12 @@ class BarbershopApp {
                 </div>
             `;
         }
+        
+        // Defensive: Auto-unlock after 10 seconds to prevent permanent freeze
+        setTimeout(() => {
+            this.hideLoadingState(page);
+            console.warn(`Auto-unlocked loading state for ${page} after timeout`);
+        }, 10000);
     }
 
     hideLoadingState(page) {
@@ -276,6 +335,10 @@ class BarbershopApp {
             navItem.style.opacity = '1';
             navItem.style.pointerEvents = 'auto';
         }
+        
+        // Defensive: Ensure body is never locked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
     }
 
     showPage(page) {
@@ -374,6 +437,10 @@ class BarbershopApp {
             el.style.pointerEvents = 'auto';
             el.style.opacity = '1';
         });
+        
+        // Defensive: Ensure body is never locked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
     }
 
 

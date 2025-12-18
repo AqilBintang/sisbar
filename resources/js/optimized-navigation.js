@@ -94,6 +94,12 @@ class OptimizedBarbershopApp {
             navItem.style.opacity = '0.7';
             navItem.style.pointerEvents = 'none';
         }
+        
+        // Defensive: Auto-unlock after 10 seconds to prevent permanent freeze
+        setTimeout(() => {
+            this.hideLoadingState(page);
+            console.warn(`Auto-unlocked loading state for ${page} after timeout`);
+        }, 10000);
     }
 
     hideLoadingState(page) {
@@ -102,6 +108,10 @@ class OptimizedBarbershopApp {
             navItem.style.opacity = '1';
             navItem.style.pointerEvents = 'auto';
         }
+        
+        // Defensive: Ensure body is never locked
+        document.body.style.pointerEvents = '';
+        document.body.style.overflow = '';
     }
 
     async navigateTo(page) {
