@@ -94,11 +94,28 @@ class BarbershopApp {
     }
 
     setupNavigation() {
-        // Setup main navigation
+        // Setup main navigation with click-lock to prevent double execution
+        let navigationLocked = false;
+        
         document.addEventListener('click', (e) => {
             if (e.target.matches('[data-navigate]')) {
                 e.preventDefault();
+                e.stopPropagation();
+                
+                // Prevent double clicks
+                if (navigationLocked) {
+                    console.log('Navigation locked, ignoring click');
+                    return;
+                }
+                
+                navigationLocked = true;
                 const page = e.target.getAttribute('data-navigate');
+                
+                // Unlock after navigation attempt
+                setTimeout(() => {
+                    navigationLocked = false;
+                }, 500);
+                
                 this.navigateTo(page);
             }
         });
@@ -513,8 +530,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    if (!window.barbershopApp) {
+    // Prevent double initialization - only initialize if no navigation system exists
+    if (!window.barbershopApp && !window.navigationInitialized) {
+        window.navigationInitialized = true;
         window.barbershopApp = new BarbershopApp();
+        console.log('BarbershopApp initialized');
         
         // If we're on barbers page after refresh, ensure navigation works
         if (window.location.pathname === '/barbers') {

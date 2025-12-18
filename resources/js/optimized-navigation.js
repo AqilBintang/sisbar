@@ -24,6 +24,9 @@ class OptimizedBarbershopApp {
     }
 
     setupOptimizedNavigation() {
+        // Initialize click-lock to prevent double execution
+        this.navigationLocked = false;
+        
         // Use event delegation for better performance
         document.addEventListener('click', this.handleNavigation.bind(this), { passive: false });
         
@@ -69,7 +72,21 @@ class OptimizedBarbershopApp {
         if (!navElement) return;
 
         e.preventDefault();
+        e.stopPropagation();
+        
+        // Prevent double clicks with click-lock
+        if (this.navigationLocked) {
+            console.log('Navigation locked, ignoring click');
+            return;
+        }
+        
+        this.navigationLocked = true;
         const page = navElement.getAttribute('data-navigate');
+        
+        // Unlock after navigation attempt
+        setTimeout(() => {
+            this.navigationLocked = false;
+        }, 500);
         
         // Add loading state immediately for better UX
         this.showLoadingState(page);
@@ -324,12 +341,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    // Replace the old app with optimized version
-    if (window.barbershopApp) {
-        window.barbershopApp.destroy?.();
+    // Prevent double initialization - only initialize if no navigation system exists
+    if (!window.navigationInitialized) {
+        window.navigationInitialized = true;
+        
+        // Replace the old app with optimized version
+        if (window.barbershopApp) {
+            window.barbershopApp.destroy?.();
+        }
+        
+        window.barbershopApp = new OptimizedBarbershopApp();
+        console.log('OptimizedBarbershopApp initialized');
+    } else {
+        console.log('Navigation already initialized, skipping OptimizedBarbershopApp');
     }
-    
-    window.barbershopApp = new OptimizedBarbershopApp();
 });
 
 // Handle browser back/forward buttons
