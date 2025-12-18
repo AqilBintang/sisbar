@@ -15,12 +15,14 @@ class Barber extends Model
         'rating',
         'level',
         'skills',
-        'is_active'
+        'is_active',
+        'is_present'
     ];
 
     protected $casts = [
         'rating' => 'decimal:2',
         'is_active' => 'boolean',
+        'is_present' => 'boolean',
         'skills' => 'array'
     ];
 
@@ -45,6 +47,16 @@ class Barber extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopePresent($query)
+    {
+        return $query->where('is_present', true);
+    }
+
+    public function scopeAvailableForBooking($query)
+    {
+        return $query->where('is_active', true)->where('is_present', true);
     }
 
     public function schedules()
