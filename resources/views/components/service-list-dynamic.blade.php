@@ -214,7 +214,7 @@
                             @endif
                             
                             <!-- Button -->
-                            <button data-select-service="{{ $service->id }}" data-navigate="barbers" 
+                            <button data-select-service="{{ $service->id }}" 
                                 class="w-full py-3 rounded-lg font-semibold transition-all duration-300 cursor-pointer
                                 @if($service->type === 'ekonomis') bg-green-500 text-white hover:bg-green-600 hover:shadow-lg hover:shadow-green-500/25 active:scale-95 active:bg-green-700
                                 @elseif($service->type === 'paket') bg-blue-500 text-white hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/25 active:scale-95 active:bg-blue-700
