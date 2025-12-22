@@ -246,6 +246,9 @@ Route::prefix('ajax')->name('ajax.')->group(function () {
 // Availability checker API (public access)
 Route::post('/api/check-availability', [App\Http\Controllers\BookingController::class, 'checkDateAvailability'])->name('api.check-availability');
 
+// Available slots API (public access)
+Route::post('/api/available-slots', [App\Http\Controllers\BookingController::class, 'getAvailableSlots'])->name('api.available-slots');
+
 // Simulate payment API (for testing)
 Route::post('/api/simulate-payment/{id}', function ($id) {
     try {
