@@ -441,4 +441,71 @@ class BookingController extends Controller
             ], 500);
         }
     }
+
+    public function getAvailableSlots(Request $request)
+    {
+        $request->validate([
+            'date' => 'required|date|after_or_equal:today'
+        ]);
+
+        try {
+            $date = $request->date;
+            
+            // Get all active barbers
+            $barbers = Barber::where('is_active', true)->get();
+            
+            // Get all bookings for the specified date
+            $bookedSlots = Booking::where('booking_date', $date)
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->get()
+                ->map(function($booking) {
+                    return $booking->barber_id . '_' . Carbon::parse($booking->booking_time)->format('H:i');
+                })
+                ->toArray();
+            
+            // Generate available time slots (9:00 - 17:00, every 30 minutes)
+            $availableSlots = [];
+            $startTime = Carbon::parse($date . ' 09:00:00');
+            $endTime = Carbon::parse($date . ' 17:00:00');
+            
+            foreach ($barbers as $barber) {
+                $currentTime = $startTime->copy();
+                
+                while ($currentTime->lt($endTime)) {
+                    $timeSlot = $currentTime->format('H:i');
+                    $slotKey = $barber->id . '_' . $timeSlot;
+                    
+                    // Check if this slot is not booked
+                    if (!in_array($slotKey, $bookedSlots)) {
+                        $availableSlots[] = [
+                            'time' => $timeSlot,
+                            'barber_id' => $barber->id,
+                            'barber_name' => $barber->name
+                        ];
+                    }
+                    
+                    $currentTime->addMinutes(30);
+                }
+            }
+            
+            // Sort by time
+            usort($availableSlots, function($a, $b) {
+                return strcmp($a['time'], $b['time']);
+            });
+
+            return response()->json([
+                'success' => true,
+                'date' => $date,
+                'slots' => $availableSlots
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Get Available Slots Error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memuat jam tersedia.'
+            ], 500);
+        }
+    }
 }

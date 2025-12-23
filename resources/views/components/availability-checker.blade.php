@@ -75,8 +75,8 @@
                 </div>
                 <h3 class="text-xl font-semibold text-green-400 mb-2">Semua Jam Tersedia</h3>
                 <p class="text-gray-400 mb-6">Belum ada booking pada tanggal ini. Semua jam masih tersedia!</p>
-                <button data-navigate="booking" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
-                    Booking Sekarang
+                <button onclick="showAvailableTimeSlots()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+                    Lihat Jam Tersedia & Booking
                 </button>
             </div>
 
@@ -100,9 +100,31 @@
                         <p class="text-sm text-gray-400 mb-4">
                             💡 <strong>Tips:</strong> Jam yang tidak ditampilkan di atas masih tersedia untuk booking
                         </p>
-                        <button data-navigate="booking" class="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-3 rounded-xl font-semibold transition-colors">
+                        <button onclick="showAvailableTimeSlots()" class="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-3 rounded-xl font-semibold transition-colors">
                             Lihat Jam Tersedia & Booking
                         </button>
+                    </div>
+                    
+                    <!-- Available Time Slots Section -->
+                    <div id="available-slots-section" class="hidden mt-6 border-t border-slate-700 pt-6">
+                        <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Jam Tersedia untuk Booking
+                        </h4>
+                        <div id="available-slots-loading" class="text-center py-4 hidden">
+                            <div class="inline-flex items-center px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-lg">
+                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span class="text-blue-400">Memuat jam tersedia...</span>
+                            </div>
+                        </div>
+                        <div id="available-slots-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -357,6 +379,97 @@ function populateBookedTimes(bookings) {
         `;
         grid.appendChild(timeCard);
     });
+}
+
+// Show available time slots for booking
+async function showAvailableTimeSlots() {
+    const dateInput = document.getElementById('check-date');
+    const selectedDate = dateInput.value;
+    
+    if (!selectedDate) {
+        alert('Silakan pilih tanggal terlebih dahulu');
+        return;
+    }
+    
+    // Show the available slots section
+    const slotsSection = document.getElementById('available-slots-section');
+    const loadingDiv = document.getElementById('available-slots-loading');
+    const slotsGrid = document.getElementById('available-slots-grid');
+    
+    slotsSection.classList.remove('hidden');
+    loadingDiv.classList.remove('hidden');
+    slotsGrid.innerHTML = '';
+    
+    try {
+        // Get available barbers and time slots
+        const response = await fetch('/api/available-slots', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            },
+            body: JSON.stringify({ date: selectedDate })
+        });
+        
+        const data = await response.json();
+        loadingDiv.classList.add('hidden');
+        
+        if (data.success && data.slots.length > 0) {
+            populateAvailableSlots(data.slots, selectedDate);
+        } else {
+            slotsGrid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4">Tidak ada jam tersedia untuk tanggal ini.</p>';
+        }
+        
+    } catch (error) {
+        console.error('Error loading available slots:', error);
+        loadingDiv.classList.add('hidden');
+        slotsGrid.innerHTML = '<p class="text-red-400 col-span-full text-center py-4">Terjadi kesalahan saat memuat jam tersedia.</p>';
+    }
+}
+
+// Populate available time slots
+function populateAvailableSlots(slots, selectedDate) {
+    const slotsGrid = document.getElementById('available-slots-grid');
+    slotsGrid.innerHTML = '';
+    
+    slots.forEach(slot => {
+        const slotCard = document.createElement('div');
+        slotCard.className = 'bg-green-500/20 border border-green-500/30 rounded-lg p-3 text-center hover:bg-green-500/30 transition-colors cursor-pointer';
+        slotCard.onclick = () => bookTimeSlot(selectedDate, slot.time, slot.barber_id, slot.barber_name);
+        
+        slotCard.innerHTML = `
+            <div class="flex items-center justify-center mb-2">
+                <svg class="w-4 h-4 text-green-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="text-green-400 font-semibold">${slot.time}</span>
+            </div>
+            <div class="text-xs text-gray-300">${slot.barber_name}</div>
+            <div class="text-xs text-green-300 mt-1">Tersedia</div>
+            <button class="mt-2 w-full bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-2 rounded transition-colors">
+                Booking
+            </button>
+        `;
+        
+        slotsGrid.appendChild(slotCard);
+    });
+}
+
+// Book a specific time slot - redirect to booking with pre-filled data
+function bookTimeSlot(date, time, barberId, barberName) {
+    // Store booking data in sessionStorage
+    const bookingData = {
+        date: date,
+        time: time,
+        barber_id: barberId,
+        barber_name: barberName,
+        from_availability: true
+    };
+    
+    sessionStorage.setItem('prefilledBookingData', JSON.stringify(bookingData));
+    
+    // Redirect to booking page
+    window.location.href = '/booking';
 }
 
 console.log('✅ Availability Checker script loaded');

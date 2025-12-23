@@ -63,6 +63,30 @@
 
                     <!-- Step 4: Service Selection -->
                     <div id="step-4" class="hidden" @if(isset($selectedService) && $selectedService) style="display: none !important;" @endif>
+                        <!-- Prefilled Data Info -->
+                        <div id="prefilled-info" class="hidden mb-6 p-4 bg-blue-500/20 border border-blue-500/30 rounded-xl">
+                            <div class="flex items-center mb-3">
+                                <svg class="w-5 h-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h3 class="text-blue-400 font-semibold">Data dari Cek Ketersediaan</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-gray-400">Tanggal:</span>
+                                    <span id="prefilled-date" class="text-white font-medium ml-2"></span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-400">Waktu:</span>
+                                    <span id="prefilled-time" class="text-white font-medium ml-2"></span>
+                                </div>
+                                <div class="col-span-2">
+                                    <span class="text-gray-400">Kapster:</span>
+                                    <span id="prefilled-barber" class="text-white font-medium ml-2"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <h2 class="text-2xl font-bold text-white mb-6">4. Pilih Layanan</h2>
                         <div id="services-list" class="space-y-3 mb-6">
                             <!-- Services will be populated here -->
@@ -89,6 +113,30 @@
 
                     <!-- Step 5: Customer Information -->
                     <div id="step-5" class="hidden">
+                        <!-- Prefilled Data Info -->
+                        <div id="prefilled-info-step5" class="hidden mb-6 p-4 bg-blue-500/20 border border-blue-500/30 rounded-xl">
+                            <div class="flex items-center mb-3">
+                                <svg class="w-5 h-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h3 class="text-blue-400 font-semibold">Data dari Cek Ketersediaan</h3>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <span class="text-gray-400">Tanggal:</span>
+                                    <span id="prefilled-date-step5" class="text-white font-medium ml-2"></span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-400">Waktu:</span>
+                                    <span id="prefilled-time-step5" class="text-white font-medium ml-2"></span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-400">Kapster:</span>
+                                    <span id="prefilled-barber-step5" class="text-white font-medium ml-2"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <h2 class="text-2xl font-bold text-white mb-6">5. Informasi Pelanggan</h2>
                         
                         <!-- Auto-filled Customer Data Display -->
@@ -259,12 +307,49 @@ console.log('Pre-selected service:', selectedService);
 // Initialize
 document.getElementById('booking-date').min = new Date().toISOString().split('T')[0];
 
-// Auto-populate customer data from authenticated user
-@auth
-bookingData.customer_name = "{{ auth()->user()->name }}";
-bookingData.customer_email = "{{ auth()->user()->email }}";
-bookingData.customer_phone = "{{ auth()->user()->whatsapp_number ?? auth()->user()->phone ?? '' }}";
-@endauth
+// Check for prefilled booking data from availability checker
+const prefilledData = sessionStorage.getItem('prefilledBookingData');
+if (prefilledData) {
+    const data = JSON.parse(prefilledData);
+    console.log('Found prefilled booking data:', data);
+    
+    // Set the form values
+    document.getElementById('booking-date').value = data.date;
+    bookingData.booking_date = data.date;
+    bookingData.barber_id = data.barber_id;
+    bookingData.booking_time = data.time;
+    
+    // Set selected data
+    selectedBarber = {
+        id: data.barber_id,
+        name: data.barber_name
+    };
+    selectedTime = {
+        time: data.time,
+        display: data.time
+    };
+    
+    // Clear the session storage
+    sessionStorage.removeItem('prefilledBookingData');
+    
+    // Skip to service selection (step 4)
+    @if(isset($selectedService) && $selectedService)
+    // If service is pre-selected, go directly to customer info (step 5)
+    showStep(5);
+    @else
+    // Load services and show step 4
+    loadServices();
+    showStep(4);
+    @endif
+} else {
+    // Normal flow - start from step 1
+    // Auto-populate customer data from authenticated user
+    @auth
+    bookingData.customer_name = "{{ auth()->user()->name }}";
+    bookingData.customer_email = "{{ auth()->user()->email }}";
+    bookingData.customer_phone = "{{ auth()->user()->whatsapp_number ?? auth()->user()->phone ?? '' }}";
+    @endauth
+}
 
 // Set default payment method visual state
 document.addEventListener('DOMContentLoaded', function() {
@@ -572,6 +657,24 @@ function showStep(step) {
     // Show current step
     document.getElementById(`step-${step}`).classList.remove('hidden');
     currentStep = step;
+    
+    // Show prefilled info if we have prefilled data and we're on step 4 or 5
+    if ((step === 4 || step === 5) && selectedBarber && selectedTime) {
+        const prefilledInfo = document.getElementById(step === 4 ? 'prefilled-info' : 'prefilled-info-step5');
+        if (prefilledInfo) {
+            prefilledInfo.classList.remove('hidden');
+            
+            // Update prefilled data display
+            const suffix = step === 5 ? '-step5' : '';
+            const dateEl = document.getElementById('prefilled-date' + suffix);
+            const timeEl = document.getElementById('prefilled-time' + suffix);
+            const barberEl = document.getElementById('prefilled-barber' + suffix);
+            
+            if (dateEl) dateEl.textContent = new Date(bookingData.booking_date).toLocaleDateString('id-ID');
+            if (timeEl) timeEl.textContent = selectedTime.display || selectedTime.time;
+            if (barberEl) barberEl.textContent = selectedBarber.name;
+        }
+    }
     
     // Update navigation buttons
     updateNavigationButtons();
