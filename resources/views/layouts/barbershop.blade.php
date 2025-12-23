@@ -102,5 +102,109 @@
     @include('components.whatsapp-float')
 
     @stack('scripts')
+    
+    <!-- Premium Navigation Enhancement Script -->
+    <script>
+    // Global navigation enhancement for barbershop layout
+    document.addEventListener('DOMContentLoaded', function() {
+        // Detect current page and set active navigation
+        function setNavigationFromContext() {
+            const path = window.location.pathname;
+            const hash = window.location.hash;
+            let activePage = 'home';
+            
+            // Check URL-based detection first
+            if (path.includes('/booking')) {
+                activePage = 'booking';
+            } else if (path.includes('/services')) {
+                activePage = 'services';
+            } else if (path.includes('/barbers')) {
+                activePage = 'barbers';
+            } else if (path.includes('/availability')) {
+                activePage = 'availability';
+            } else {
+                // Check visible sections for single-page navigation
+                const visiblePage = document.querySelector('[data-page]:not([style*="display: none"])');
+                if (visiblePage) {
+                    const pageType = visiblePage.getAttribute('data-page');
+                    if (pageType && pageType !== 'home') {
+                        activePage = pageType;
+                    }
+                }
+                
+                // Check hash-based navigation (including availability)
+                if (hash) {
+                    const sectionMap = {
+                        '#mengapa-pilih-kami': 'services',
+                        '#layanan': 'services',
+                        '#kapster': 'barbers',
+                        '#booking': 'booking',
+                        '#services': 'services',
+                        '#barbers': 'barbers',
+                        '#availability': 'availability'  // Re-added for proper hash detection
+                    };
+                    activePage = sectionMap[hash] || activePage;
+                    
+                    // Show the appropriate page if hash matches
+                    if (sectionMap[hash]) {
+                        const targetPageElement = document.querySelector(`[data-page="${sectionMap[hash]}"]`);
+                        if (targetPageElement) {
+                            // Hide all pages first
+                            document.querySelectorAll('[data-page]').forEach(page => {
+                                page.style.display = 'none';
+                            });
+                            // Show target page
+                            targetPageElement.style.display = 'block';
+                            
+                            // Initialize availability checker if needed
+                            if (sectionMap[hash] === 'availability' && window.initAvailabilityChecker) {
+                                setTimeout(() => {
+                                    window.initAvailabilityChecker();
+                                }, 300);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Apply premium active state
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const linkPage = link.getAttribute('data-navigate') || link.getAttribute('data-nav-item');
+                
+                if (linkPage === activePage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            console.log(`✨ Premium navigation active state set for: ${activePage}`);
+        }
+        
+        // Set initial navigation state with delay to ensure DOM is ready
+        setTimeout(setNavigationFromContext, 150);
+        
+        // Listen for hash changes and navigation
+        window.addEventListener('hashchange', setNavigationFromContext);
+        window.addEventListener('popstate', setNavigationFromContext);
+        
+        // Observer for dynamic page changes
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    const target = mutation.target;
+                    if (target.hasAttribute('data-page') && target.style.display !== 'none') {
+                        setTimeout(setNavigationFromContext, 50);
+                    }
+                }
+            });
+        });
+        
+        // Observe all page elements for visibility changes
+        document.querySelectorAll('[data-page]').forEach(page => {
+            observer.observe(page, { attributes: true, attributeFilter: ['style'] });
+        });
+    });
+    </script>
 </body>
 </html>

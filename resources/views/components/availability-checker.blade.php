@@ -13,16 +13,21 @@
 
         <!-- Date Picker -->
         <div class="max-w-md mx-auto mb-8">
-            <div class="bg-slate-800 rounded-xl p-6">
+            <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl">
                 <label for="check-date" class="block text-sm font-medium text-gray-300 mb-3">Pilih Tanggal</label>
                 <input type="date" 
                        id="check-date" 
-                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
+                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all"
                        onchange="checkAvailability()">
-                <button onclick="checkAvailability()" class="w-full mt-3 bg-yellow-400 text-black px-4 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors">
-                    Cek Ketersediaan
+                <button onclick="checkAvailability()" class="w-full mt-3 bg-yellow-400 text-black px-4 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-all transform hover:scale-105 active:scale-95">
+                    <span class="flex items-center justify-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Cek Ketersediaan
+                    </span>
                 </button>
-                <p class="text-xs text-gray-400 mt-2">Pilih tanggal untuk melihat jam yang sudah terbooked</p>
+                <p class="text-xs text-gray-400 mt-2 text-center">Pilih tanggal untuk melihat jam yang sudah terbooked</p>
             </div>
         </div>
 
@@ -48,6 +53,17 @@
                 </div>
                 <h3 class="text-xl font-semibold text-gray-300 mb-2">Pilih Tanggal</h3>
                 <p class="text-gray-400">Pilih tanggal di atas untuk melihat ketersediaan booking</p>
+                
+                <!-- Error Message (hidden by default) -->
+                <div class="error-message hidden mt-4 p-4 bg-red-500/20 border border-red-500/30 rounded-lg">
+                    <div class="flex items-center justify-center mb-2">
+                        <svg class="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                        <span class="text-red-400 font-semibold">Terjadi Kesalahan</span>
+                    </div>
+                    <p class="text-red-300 text-sm"></p>
+                </div>
             </div>
 
             <!-- No Bookings State -->
@@ -127,23 +143,111 @@
 </div>
 
 <script>
-// Set minimum date to today
-document.addEventListener('DOMContentLoaded', function() {
+// Enhanced initialization for availability checker with debouncing
+let availabilityInitialized = false;
+let isCheckingAvailability = false;
+let availabilityController = null;
+let initializationTimeout = null;
+
+// Initialize availability checker with better error handling and debouncing
+function initializeAvailabilityChecker() {
+    // Prevent multiple simultaneous initializations
+    if (initializationTimeout) {
+        clearTimeout(initializationTimeout);
+    }
+    
+    console.log('🔧 Initializing Availability Checker...');
+    
     const dateInput = document.getElementById('check-date');
     if (dateInput) {
+        // Set minimum date to today
         dateInput.min = new Date().toISOString().split('T')[0];
         // Set default to today
         dateInput.value = new Date().toISOString().split('T')[0];
+        
+        console.log('✅ Date input initialized');
+        availabilityInitialized = true;
+        
+        // Auto-check availability for today (only if not already checking)
+        if (!isCheckingAvailability) {
+            initializationTimeout = setTimeout(() => {
+                if (dateInput.value && !isCheckingAvailability) {
+                    console.log('🔍 Auto-checking availability for today');
+                    checkAvailability();
+                }
+            }, 500);
+        }
+    } else {
+        console.error('❌ Date input not found, retrying once...');
+        // Only retry once to prevent infinite loops
+        if (!availabilityInitialized) {
+            initializationTimeout = setTimeout(initializeAvailabilityChecker, 500);
+        }
+    }
+}
+
+// Enhanced DOM ready handler
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📅 Availability Checker DOM Ready');
+    if (!availabilityInitialized) {
+        initializeAvailabilityChecker();
     }
 });
 
+// Additional initialization when page becomes visible (with debouncing)
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden && !availabilityInitialized) {
+        console.log('👁️ Page visible, reinitializing availability checker');
+        setTimeout(() => {
+            if (!availabilityInitialized) {
+                initializeAvailabilityChecker();
+            }
+        }, 200);
+    }
+});
+
+// Global function to reinitialize (called from navigation)
+window.initAvailabilityChecker = function() {
+    console.log('🔄 Manual availability checker initialization');
+    if (!isCheckingAvailability) {
+        availabilityInitialized = false;
+        initializeAvailabilityChecker();
+    }
+};
+
 async function checkAvailability() {
+    // Prevent multiple simultaneous requests
+    if (isCheckingAvailability) {
+        console.log('⏳ Already checking availability, skipping...');
+        return;
+    }
+    
     const dateInput = document.getElementById('check-date');
+    
+    if (!dateInput) {
+        console.error('❌ Date input not found');
+        return;
+    }
+    
     const selectedDate = dateInput.value;
     
-    if (!selectedDate) return;
+    if (!selectedDate) {
+        console.warn('⚠️ No date selected');
+        return;
+    }
     
-    // Show loading
+    // Cancel previous request if exists
+    if (availabilityController) {
+        availabilityController.abort();
+    }
+    
+    // Create new AbortController for this request
+    availabilityController = new AbortController();
+    isCheckingAvailability = true;
+    
+    console.log(`🔍 Checking availability for: ${selectedDate}`);
+    
+    // Show loading with immediate feedback
     showAvailabilityState('loading');
     
     try {
@@ -153,89 +257,129 @@ async function checkAvailability() {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
             },
-            body: JSON.stringify({ date: selectedDate })
+            body: JSON.stringify({ date: selectedDate }),
+            signal: availabilityController.signal
         });
         
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
+        console.log('📊 Availability data received:', data);
         
         if (data.success) {
             if (data.bookings.length === 0) {
+                console.log('✅ No bookings found - all times available');
                 showAvailabilityState('no-bookings');
             } else {
+                console.log(`📋 Found ${data.bookings.length} bookings`);
                 showAvailabilityState('bookings-found', data.bookings);
             }
         } else {
-            showAvailabilityState('error');
+            console.error('❌ API returned error:', data.message);
+            showAvailabilityState('error', data.message);
         }
         
     } catch (error) {
-        console.error('Error checking availability:', error);
-        showAvailabilityState('error');
+        if (error.name === 'AbortError') {
+            console.log('🚫 Request cancelled');
+            return;
+        }
+        console.error('❌ Error checking availability:', error);
+        showAvailabilityState('error', error.message);
+    } finally {
+        isCheckingAvailability = false;
+        availabilityController = null;
     }
 }
 
-function showAvailabilityState(state, bookings = []) {
-    // Hide all states
-    document.getElementById('default-state').classList.add('hidden');
-    document.getElementById('no-bookings-state').classList.add('hidden');
-    document.getElementById('bookings-found-state').classList.add('hidden');
-    document.getElementById('loading-availability').classList.add('hidden');
+function showAvailabilityState(state, data = null) {
+    console.log(`🎯 Showing availability state: ${state}`);
     
+    // Get all state elements
+    const defaultState = document.getElementById('default-state');
+    const noBookingsState = document.getElementById('no-bookings-state');
+    const bookingsFoundState = document.getElementById('bookings-found-state');
+    const loadingState = document.getElementById('loading-availability');
+    
+    // Hide all states first
+    [defaultState, noBookingsState, bookingsFoundState, loadingState].forEach(el => {
+        if (el) el.classList.add('hidden');
+    });
+    
+    // Show appropriate state
     switch (state) {
         case 'loading':
-            document.getElementById('loading-availability').classList.remove('hidden');
+            if (loadingState) {
+                loadingState.classList.remove('hidden');
+            }
             break;
             
         case 'no-bookings':
-            document.getElementById('no-bookings-state').classList.remove('hidden');
+            if (noBookingsState) {
+                noBookingsState.classList.remove('hidden');
+            }
             break;
             
         case 'bookings-found':
-            document.getElementById('bookings-found-state').classList.remove('hidden');
-            populateBookedTimes(bookings);
+            if (bookingsFoundState) {
+                bookingsFoundState.classList.remove('hidden');
+                if (data) populateBookedTimes(data);
+            }
             break;
             
         case 'error':
-            // Show default state with error message
-            document.getElementById('default-state').classList.remove('hidden');
+            if (defaultState) {
+                defaultState.classList.remove('hidden');
+                // Show error message
+                const errorMsg = defaultState.querySelector('.error-message');
+                const errorText = defaultState.querySelector('.error-message p');
+                if (errorMsg && errorText) {
+                    errorText.textContent = data || 'Terjadi kesalahan saat mengecek ketersediaan';
+                    errorMsg.classList.remove('hidden');
+                }
+            }
             break;
             
         default:
-            document.getElementById('default-state').classList.remove('hidden');
+            if (defaultState) {
+                defaultState.classList.remove('hidden');
+            }
     }
 }
 
 function populateBookedTimes(bookings) {
     const grid = document.getElementById('booked-times-grid');
+    if (!grid) {
+        console.error('❌ Booked times grid not found');
+        return;
+    }
+    
+    console.log(`📋 Populating ${bookings.length} booked times`);
     grid.innerHTML = '';
+    
+    if (bookings.length === 0) {
+        grid.innerHTML = '<p class="text-gray-400 text-center col-span-full">Tidak ada booking pada tanggal ini</p>';
+        return;
+    }
     
     bookings.forEach(booking => {
         const timeCard = document.createElement('div');
-        timeCard.className = 'bg-red-500/20 border border-red-500/30 rounded-lg p-3 text-center';
+        timeCard.className = 'bg-red-500/20 border border-red-500/30 rounded-lg p-3 text-center hover:bg-red-500/30 transition-colors';
         timeCard.innerHTML = `
             <div class="flex items-center justify-center mb-2">
                 <svg class="w-4 h-4 text-red-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <span class="text-red-400 font-semibold">${booking.time}</span>
+                <span class="text-red-400 font-semibold">${booking.time || booking.booking_time}</span>
             </div>
-            <div class="text-xs text-gray-400">${booking.barber_name}</div>
+            <div class="text-xs text-gray-300">${booking.barber_name || booking.barber?.name || 'Kapster'}</div>
             <div class="text-xs text-red-300 mt-1">Terbooked</div>
         `;
         grid.appendChild(timeCard);
     });
 }
-
-// Auto-check availability when page loads if date is set
-document.addEventListener('DOMContentLoaded', function() {
-    // Small delay to ensure DOM is ready
-    setTimeout(() => {
-        const dateInput = document.getElementById('check-date');
-        if (dateInput && dateInput.value) {
-            checkAvailability();
-        }
-    }, 500);
-});
 
 // Show available time slots for booking
 async function showAvailableTimeSlots() {
@@ -327,4 +471,6 @@ function bookTimeSlot(date, time, barberId, barberName) {
     // Redirect to booking page
     window.location.href = '/booking';
 }
+
+console.log('✅ Availability Checker script loaded');
 </script>

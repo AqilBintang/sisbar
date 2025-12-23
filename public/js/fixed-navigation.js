@@ -126,6 +126,9 @@ function handleNavigation() {
         if (targetPage) {
             targetPage.style.display = 'block';
             console.log(`👁️ Showing page: ${page}`);
+            
+            // Smooth scroll to top for better UX
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             console.error(`❌ Target page not found: ${page}`);
         }
@@ -136,14 +139,24 @@ function handleNavigation() {
             await window.loadBarbers();
         }
         
-        // Update navigation active state
-        document.querySelectorAll('[data-navigate]').forEach(nav => {
-            if (nav.getAttribute('data-navigate') === page) {
-                nav.classList.add('text-yellow-400');
-                nav.classList.remove('text-gray-300');
+        // Initialize availability checker if navigating to availability
+        if (page === 'availability' && window.initAvailabilityChecker) {
+            console.log('🔄 Initializing availability checker after navigation');
+            setTimeout(() => {
+                window.initAvailabilityChecker();
+            }, 200);
+        }
+        
+        // Update navigation active state with premium effects
+        document.querySelectorAll('.nav-link').forEach(nav => {
+            const navPage = nav.getAttribute('data-navigate') || nav.getAttribute('data-nav-item');
+            if (navPage === page) {
+                nav.classList.add('active');
+                // Add brief premium loading effect
+                nav.classList.add('loading');
+                setTimeout(() => nav.classList.remove('loading'), 300);
             } else {
-                nav.classList.remove('text-yellow-400');
-                nav.classList.add('text-gray-300');
+                nav.classList.remove('active', 'loading');
             }
         });
         
