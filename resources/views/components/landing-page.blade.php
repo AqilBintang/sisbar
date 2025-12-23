@@ -93,7 +93,7 @@
                     <button data-navigate="booking" class="bg-accent text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-400 transition-all transform hover:scale-105 pulse-accent">
                         Coba Booking
                     </button>
-                    <button data-navigate="availability" class="bg-transparent border-2 border-accent text-accent px-8 py-4 rounded-lg font-semibold text-lg hover:bg-accent hover:text-black transition-all transform hover:scale-105">
+                    <button onclick="scrollToSection('mengapa-pilih-kami')" class="bg-transparent border-2 border-accent text-accent px-8 py-4 rounded-lg font-semibold text-lg hover:bg-accent hover:text-black transition-all transform hover:scale-105">
                         Lihat Fitur
                     </button>
                 </div>
@@ -267,14 +267,14 @@
                              alt="Professional Barber Tools" 
                              class="w-full h-64 object-cover rounded-lg"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="w-full h-64 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center" style="display: none;">
+                        <div class="w-full h-64 bg-gradient-to-br from-black to-gray-900 rounded-lg flex items-center justify-center" style="display: none;">
                             <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                             </svg>
                         </div>
                         
                         <!-- Fallback -->
-                        <div class="w-full h-64 bg-gray-800 rounded-lg flex items-center justify-center" style="display: none;">
+                        <div class="w-full h-64 bg-black rounded-lg flex items-center justify-center" style="display: none;">
                             <div class="text-center">
                                 <span class="text-yellow-400 text-4xl mb-2 block">🛠️</span>
                                 <p class="text-white text-sm">Professional Tools</p>
@@ -288,14 +288,14 @@
                              alt="Professional Barber at Work" 
                              class="w-full h-64 object-cover rounded-lg"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="w-full h-64 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center" style="display: none;">
+                        <div class="w-full h-64 bg-gradient-to-br from-black to-gray-900 rounded-lg flex items-center justify-center" style="display: none;">
                             <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                         </div>>
                         
                         <!-- Fallback -->
-                        <div class="w-full h-64 bg-gray-800 rounded-lg flex items-center justify-center" style="display: none;">
+                        <div class="w-full h-64 bg-black rounded-lg flex items-center justify-center" style="display: none;">
                             <div class="text-center">
                                 <span class="text-yellow-400 text-4xl mb-2 block">💇‍♂️</span>
                                 <p class="text-white text-sm">Expert Barber</p>
@@ -356,18 +356,18 @@
 </section>
 
 <!-- Mengapa Pilih Kami Section - 3 Column Layout -->
-<section class="relative py-20 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white overflow-hidden">
+<section id="mengapa-pilih-kami" class="relative py-20 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-hidden">
     <!-- Enhanced Background -->
     <div class="absolute inset-0">
         <!-- Animated Gradient Background -->
-        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800"></div>
-        <!-- Moving Pattern -->
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, #FCD34D 2px, transparent 2px), radial-gradient(circle at 75% 75%, #FCD34D 1px, transparent 1px); background-size: 80px 80px, 40px 40px; animation: patternMove 20s linear infinite;"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <!-- Diagonal Pattern -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute inset-0" style="background-image: linear-gradient(45deg, #FCD34D 1px, transparent 1px), linear-gradient(-45deg, #FCD34D 1px, transparent 1px); background-size: 60px 60px; animation: diagonalMove 15s linear infinite;"></div>
         </div>
         <!-- Floating Orbs -->
-        <div class="absolute top-20 left-20 w-32 h-32 bg-yellow-400/5 rounded-full blur-xl animate-pulse"></div>
-        <div class="absolute bottom-20 right-20 w-48 h-48 bg-yellow-400/3 rounded-full blur-2xl animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-20 left-20 w-32 h-32 bg-yellow-400/8 rounded-full blur-xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-20 w-48 h-48 bg-yellow-400/5 rounded-full blur-2xl animate-pulse" style="animation-delay: 2s;"></div>
     </div>
     
     <div class="container mx-auto px-4 relative z-10">
@@ -538,21 +538,22 @@
 </section>
 
 <!-- Process Flow Section - Enhanced Dark Theme -->
-<section class="relative py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white overflow-hidden">
+<section class="relative py-20 bg-black text-white overflow-hidden">
     <!-- Enhanced Background -->
     <div class="absolute inset-0">
-        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div>
-        <!-- Animated Pattern -->
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, #FCD34D 2px, transparent 2px), radial-gradient(circle at 75% 75%, #FCD34D 1px, transparent 1px); background-size: 100px 100px, 50px 50px; animation: patternMove 30s linear infinite;"></div>
+        <div class="absolute inset-0 bg-black"></div>
+        <!-- Hexagonal Pattern -->
+        <div class="absolute inset-0 opacity-8">
+            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" fill-rule=\"evenodd\"><g fill=\"%23FCD34D\" fill-opacity=\"0.1\"><polygon points=\"30,0 52,15 52,45 30,60 8,45 8,15\"/></g></svg>'); animation: hexMove 20s linear infinite;"></div>
         </div>
         <!-- Floating Orbs with Glow -->
         <div class="absolute top-20 left-20 w-32 h-32 bg-yellow-400/8 rounded-full blur-2xl animate-pulse"></div>
         <div class="absolute bottom-20 right-20 w-40 h-40 bg-yellow-400/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 3s;"></div>
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-400/3 rounded-full blur-3xl animate-pulse" style="animation-delay: 6s;"></div>
+        
         <!-- Subtle Grid Lines -->
         <div class="absolute inset-0 opacity-5">
-            <div class="absolute inset-0" style="background-image: linear-gradient(rgba(252, 211, 77, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(252, 211, 77, 0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
+            <div class="absolute inset-0" style="background-image: linear-gradient(rgba(252, 211, 77, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(252, 211, 77, 0.1) 1px, transparent 1px); background-size: 100px 100px;"></div>
         </div>
     </div>
     
@@ -586,7 +587,7 @@
                         <!-- Card Shadow -->
                         <div class="absolute inset-0 bg-gradient-to-br from-yellow-400/5 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         
-                        <div class="relative bg-gradient-to-br from-gray-800/50 via-black/60 to-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-400/40 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-400/10 transform hover:scale-105 hover:-translate-y-2">
+                        <div class="relative bg-black/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-800/50 hover:border-yellow-400/40 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-400/10 transform hover:scale-105 hover:-translate-y-2">
                             <!-- Enhanced Step Number -->
                             <div class="absolute -top-6 left-1/2 transform -translate-x-1/2">
                                 <div class="relative">
@@ -677,7 +678,7 @@
                         <!-- Card Shadow -->
                         <div class="absolute inset-0 bg-gradient-to-br from-yellow-400/5 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         
-                        <div class="relative bg-gradient-to-br from-gray-800/50 via-black/60 to-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-400/40 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-400/10 transform hover:scale-105 hover:-translate-y-2">
+                        <div class="relative bg-black/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-800/50 hover:border-yellow-400/40 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-400/10 transform hover:scale-105 hover:-translate-y-2">
                             <!-- Enhanced Step Number -->
                             <div class="absolute -top-6 left-1/2 transform -translate-x-1/2">
                                 <div class="relative">
@@ -723,12 +724,12 @@
                                     
                                     <!-- Enhanced Time Slots -->
                                     <div class="grid grid-cols-3 gap-1">
-                                        <div class="bg-gradient-to-br from-gray-800/60 to-gray-900/40 text-gray-400 text-xs p-1 rounded text-center border border-gray-700/30">09:00</div>
+                                        <div class="bg-black/60 text-gray-400 text-xs p-1 rounded text-center border border-gray-800/30">09:00</div>
                                         <div class="relative">
                                             <div class="bg-gradient-to-r from-yellow-400/20 to-yellow-500/15 text-yellow-400 text-xs p-1 rounded text-center border border-yellow-400/40 font-semibold shadow-lg">10:00</div>
                                             <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-yellow-500/5 rounded blur-sm"></div>
                                         </div>
-                                        <div class="bg-gradient-to-br from-gray-800/60 to-gray-900/40 text-gray-400 text-xs p-1 rounded text-center border border-gray-700/30">11:00</div>
+                                        <div class="bg-black/60 text-gray-400 text-xs p-1 rounded text-center border border-gray-800/30">11:00</div>
                                     </div>
                                 </div>
                                 
@@ -776,7 +777,7 @@
                         <!-- Card Shadow -->
                         <div class="absolute inset-0 bg-gradient-to-br from-yellow-400/5 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         
-                        <div class="relative bg-gradient-to-br from-gray-800/50 via-black/60 to-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-400/40 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-400/10 transform hover:scale-105 hover:-translate-y-2">
+                        <div class="relative bg-black/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-800/50 hover:border-yellow-400/40 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-400/10 transform hover:scale-105 hover:-translate-y-2">
                             <!-- Enhanced Step Number -->
                             <div class="absolute -top-6 left-1/2 transform -translate-x-1/2">
                                 <div class="relative">
@@ -814,7 +815,7 @@
                                             </div>
                                             <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-yellow-500/5 rounded blur-sm"></div>
                                         </div>
-                                        <div class="bg-gradient-to-br from-gray-800/60 to-gray-900/40 text-gray-400 text-xs p-2 rounded text-center border border-gray-700/30">
+                                        <div class="bg-black/60 text-gray-400 text-xs p-2 rounded text-center border border-gray-800/30">
                                             <div>💰 Cash</div>
                                         </div>
                                     </div>
@@ -1261,5 +1262,24 @@
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    AOS.init();
+    AOS.init({
+        duration: 800,  // Durasi animasi 0.8s untuk keseimbangan yang optimal
+        easing: 'ease-out-cubic',
+        once: true,     // Animasi hanya sekali saat scroll
+        offset: 50      // Trigger animasi 50px sebelum element terlihat
+    });
+    
+    // Smooth scroll function
+    function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            const navbarHeight = 80; // Account for fixed navbar height
+            const elementPosition = element.offsetTop - navbarHeight;
+            
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+            });
+        }
+    }
 </script>

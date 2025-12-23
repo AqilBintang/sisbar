@@ -1293,4 +1293,24 @@ async function simulateInlinePaymentCancel(bookingId) {
 
 <!-- Midtrans Snap Script -->
 <script src="{{ config('midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('midtrans.client_key') }}"></script>
+
+<script>
+// Ensure booking navigation is active when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 Setting booking page navigation active state');
+    
+    // Set active state for booking navigation
+    document.querySelectorAll('.nav-link').forEach(link => {
+        const linkPage = link.getAttribute('data-navigate') || link.getAttribute('data-nav-item');
+        
+        if (linkPage === 'booking') {
+            link.classList.add('active');
+            console.log('✨ Booking navigation activated');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+});
+</script>
+
 @endsection
